@@ -85,5 +85,5 @@ open ControlTraining.xcodeproj
 - [需求文档](docs/specs/requirements.md)
 - [架构设计](docs/specs/design.md)
 - [实现任务](docs/specs/tasks.md)
-- [最新审查报告](docs/reviews/v5.5-代码复查报告.md)
+- [最新审查报告](docs/reviews/v5.6-代码复查报告.md)
 - [文档中心索引](docs/README.md)

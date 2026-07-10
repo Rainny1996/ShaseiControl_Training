@@ -134,6 +134,15 @@ enum TrainingGoal: String, Codable, CaseIterable {
         case .comprehensive: return "star.fill"
         }
     }
+
+    var description: String {
+        switch self {
+        case .endurance: return "延长可控时间，增强耐力"
+        case .control: return "提升关键时刻的自控能力"
+        case .recovery: return "加速身体机能恢复"
+        case .comprehensive: return "综合提升各方面能力"
+        }
+    }
 }
 
 // MARK: - Review Note Model

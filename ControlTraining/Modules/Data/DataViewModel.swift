@@ -58,7 +58,10 @@ final class DataViewModel: ObservableObject {
                 let jsonData = try JSONEncoder().encode(exports)
 
                 // 3. AES-256-GCM 二次加密
-                let sealedBox = try self.cryptoService.encryptData(jsonData)
+                guard let sealedBox = try self.cryptoService.encryptData(jsonData) else {
+                    await MainActor.run { self.showError("导出加密失败") }
+                    return nil
+                }
 
                 // 4. 写入临时文件
                 let tempDir = FileManager.default.temporaryDirectory
@@ -107,7 +110,9 @@ final class DataViewModel: ObservableObject {
         await Task.detached(priority: .userInitiated) {
             do {
                 let sealedBox = try Data(contentsOf: url)
-                let jsonData = try CryptoService.shared.decryptData(sealedBox)
+                guard let jsonData = try CryptoService.shared.decryptData(sealedBox) else {
+                    throw DataError.invalidBackup
+                }
                 let exports = try JSONDecoder().decode(DataExport.self, from: jsonData)
 
                 // 完整性校验: 至少有一类数据非空才视为有效备份
@@ -214,7 +219,7 @@ final class DataViewModel: ObservableObject {
         return exports
     }
 
-    private func showError(_ message: String) {
+    func showError(_ message: String) {
         errorMessage = message
         showingError = true
     }

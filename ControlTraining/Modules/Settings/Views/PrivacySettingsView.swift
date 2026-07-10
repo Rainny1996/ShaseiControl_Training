@@ -83,17 +83,19 @@ struct PrivacySettingsView: View {
             }
             
             // MARK: - 隐私保护
-            Section(header: Text("隐私保护"), content: {
+            Section {
                 Toggle("后台模糊保护", isOn: $isBlurEnabled)
                     .onChange(of: isBlurEnabled) { newValue in
                         SecurityService.shared.isBlurProtectionEnabled = newValue
                     }
+            } header: {
+                Text("隐私保护")
             } footer: {
                 Text("启用后，应用切换到后台时会自动模糊界面，防止他人通过多任务切换看到敏感内容。")
             }
             
             // MARK: - 数据安全
-            Section(header: Text("数据安全"), content: {
+            Section {
                 HStack {
                     Label("数据加密", systemImage: "lock.shield")
                     Spacer()
@@ -109,6 +111,8 @@ struct PrivacySettingsView: View {
                         .foregroundColor(.secondary)
                         .font(.caption)
                 }
+            } header: {
+                Text("数据安全")
             } footer: {
                 Text("敏感数据使用AES-256加密存储，密码使用SHA-256加盐哈希保存在系统Keychain中。")
             }

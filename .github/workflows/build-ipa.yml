@@ -11,17 +11,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Select Xcode
-        run: sudo xcode-select -s /Applications/Xcode_15.4.app/Contents/Developer
+      - name: Check Xcode versions
+        run: |
+          echo "Default Xcode:"
+          xcodebuild -version
+          echo ""
+          echo "Available Xcode versions:"
+          ls /Applications/ | grep Xcode
 
       - name: Install XcodeGen
         run: brew install xcodegen
 
       - name: Generate Xcode Project
-        run: xcodegen generate
+        run: |
+          xcodegen generate
+          echo "Project generated. Listing files:"
+          ls -la *.xcodeproj
 
       - name: Build App
         run: |
+          set -e
           xcodebuild build \
             -project ControlTraining.xcodeproj \
             -scheme ControlTraining \
@@ -33,17 +42,29 @@ jobs:
             CODE_SIGN_IDENTITY="" \
             DEVELOPMENT_TEAM="" \
             ENABLE_BITCODE=NO \
-            | xcpretty || true
+            2>&1 | tee build.log
+          echo "Build exit code: $?"
+
+      - name: Debug - List build products
+        if: always()
+        run: |
+          echo "=== Build directory structure ==="
+          find build -type d -maxdepth 4 2>/dev/null || echo "build directory not found"
+          echo ""
+          echo "=== .app files ==="
+          find build -name "*.app" 2>/dev/null || echo "No .app files found"
+          echo ""
+          echo "=== Products directory ==="
+          ls -laR build/Build/Products/ 2>/dev/null || echo "Products directory not found"
 
       - name: Create IPA
         run: |
-          APP_PATH=$(find build -name "ControlTraining.app" -path "*/Release-iphoneos/*" | head -1)
+          set -e
+          APP_PATH=$(find build -name "ControlTraining.app" | head -1)
           if [ -z "$APP_PATH" ]; then
-            echo "Error: Could not find ControlTraining.app"
-            echo "Searching for .app files..."
-            find build -name "*.app" || true
-            echo "Listing build products..."
-            ls -la build/Build/Products/ || true
+            echo "ERROR: Could not find ControlTraining.app"
+            echo "Checking build log for errors..."
+            grep -i "error:" build.log | head -20 || echo "No errors found in log"
             exit 1
           fi
           echo "Found app at: $APP_PATH"
@@ -55,7 +76,16 @@ jobs:
 
       - name: Upload IPA
         uses: actions/upload-artifact@v4
+        if: success()
         with:
           name: ControlTraining-ipa
           path: ControlTraining.ipa
           retention-days: 30
+
+      - name: Upload build log
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: build-log
+          path: build.log
+          retention-days: 7

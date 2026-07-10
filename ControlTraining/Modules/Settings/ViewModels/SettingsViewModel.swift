@@ -60,16 +60,16 @@ final class SettingsViewModel: ObservableObject {
         isReminderEnabled = enabled
         defaults.set(enabled, forKey: SettingsKey.trainingReminderEnabled.rawValue)
         if enabled {
-            NotificationService.shared.requestAuthAndScheduleDefaults()
+            NotificationService.shared.requestAuthorization()
         } else {
-            NotificationService.shared.cancelAll()
+            NotificationService.shared.cancelAllNotifications()
         }
     }
 
     func toggleBiometric(_ enabled: Bool) {
         isBiometricEnabled = enabled
         defaults.set(enabled, forKey: SettingsKey.biometricEnabled.rawValue)
-        SecurityService.shared.setBiometricEnabled(enabled)
+        UserDefaults.standard.set(enabled, forKey: "useFaceID")
     }
 
     func updateFontSize(_ size: FontSizePreference) {

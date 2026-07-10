@@ -30,7 +30,7 @@ struct ProfileView: View {
                 }
             }
             .sheet(isPresented: $showSettings) {
-                SettingsView()
+                ProfileSettingsView()
             }
         }
     }
@@ -159,7 +159,7 @@ struct FeatureRow<D: View>: View {
 }
 
 /// 设置视图
-struct SettingsView: View {
+struct ProfileSettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @AppStorage("useFaceID") private var useFaceID = true
     @AppStorage("enableNotifications") private var enableNotifications = true

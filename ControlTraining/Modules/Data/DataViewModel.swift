@@ -14,7 +14,7 @@ final class DataViewModel: ObservableObject {
     @Published var exportURL: URL?
     @Published var showActivity = false
     @Published var errorMessage: String?
-    @Published var showError = false
+    @Published var showingError = false
 
     private let dataController = DataController.shared
     private let cryptoService = CryptoService.shared
@@ -58,7 +58,7 @@ final class DataViewModel: ObservableObject {
                 let jsonData = try JSONEncoder().encode(exports)
 
                 // 3. AES-256-GCM 二次加密
-                let sealedBox = try self.cryptoService.encrypt(jsonData)
+                let sealedBox = try self.cryptoService.encryptData(jsonData)
 
                 // 4. 写入临时文件
                 let tempDir = FileManager.default.temporaryDirectory
@@ -107,7 +107,7 @@ final class DataViewModel: ObservableObject {
         await Task.detached(priority: .userInitiated) {
             do {
                 let sealedBox = try Data(contentsOf: url)
-                let jsonData = try CryptoService.shared.decrypt(sealedBox)
+                let jsonData = try CryptoService.shared.decryptData(sealedBox)
                 let exports = try JSONDecoder().decode(DataExport.self, from: jsonData)
 
                 // 完整性校验: 至少有一类数据非空才视为有效备份
@@ -216,7 +216,7 @@ final class DataViewModel: ObservableObject {
 
     private func showError(_ message: String) {
         errorMessage = message
-        showError = true
+        showingError = true
     }
 }
 

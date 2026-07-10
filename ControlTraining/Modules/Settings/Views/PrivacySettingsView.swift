@@ -16,7 +16,7 @@ struct PrivacySettingsView: View {
     var body: some View {
         Form {
             // MARK: - 认证方式
-            Section(header: Text("认证方式"), content: {
+            Section {
                 // 生物识别
                 if SecurityService.shared.isBiometricAvailable {
                     Toggle(biometricName, isOn: $useFaceID)
@@ -54,6 +54,8 @@ struct PrivacySettingsView: View {
                     Label(authMode.rawValue, systemImage: authMode.iconName)
                         .foregroundColor(.secondary)
                 }
+            } header: {
+                Text("认证方式")
             } footer: {
                 Text("选择进入应用时的身份验证方式。生物识别需要设备支持Face ID或Touch ID。")
             }

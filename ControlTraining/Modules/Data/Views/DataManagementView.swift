@@ -80,7 +80,7 @@ struct DataManagementView: View {
             Text("此操作将永久删除所有训练记录和数据，无法恢复。\n确认继续？")
         }
         // 错误提示
-        .alert("操作失败", isPresented: $viewModel.showError) {
+        .alert("操作失败", isPresented: $viewModel.showingError) {
             Button("确定", role: .cancel) {}
         } message: {
             Text(viewModel.errorMessage ?? "未知错误")

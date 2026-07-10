@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import SwiftUI
 
 /// 评估问卷视图模型
 class AssessmentViewModel: ObservableObject {

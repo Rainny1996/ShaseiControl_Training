@@ -16,7 +16,7 @@ class DataController: ObservableObject {
         
         // 配置数据保护级别
         if let description = container.persistentStoreDescriptions.first {
-            description.setOption(FileProtectionType.complete.rawValue as NSNumber,
+            description.setOption(FileProtectionType.complete.rawValue,
                                   forKey: NSPersistentStoreFileProtectionKey)
         }
         

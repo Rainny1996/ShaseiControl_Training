@@ -301,23 +301,14 @@ class SecurityService {
         return salt
     }
     
-    /// SEC-01 修复：使用 PBKDF2-SHA256（100,000 次迭代）替代单次 SHA256
+    /// SEC-01 修复：使用 CryptoKit PBKDF2<SHA256>（100,000 次迭代）
     private func hashPassword(_ password: String, salt: Data) -> Data? {
-        guard let passwordData = password.data(using: .utf8) else { return nil }
-        var derivedKey = Data(count: 32)
-        let result = derivedKey.withUnsafeMutableBytes { keyBytes in
-            salt.withUnsafeBytes { saltBytes in
-                CCKeyDerivationPBKDF(
-                    CCPBKDFAlgorithm(kCCPBKDF2),
-                    password, passwordData.count,
-                    saltBytes.baseAddress, salt.count,
-                    CCPseudoRandomAlgorithm(kCCPRFHmacAlgSHA256),
-                    100_000,
-                    keyBytes.baseAddress, 32)
-            }
-        }
-        guard result == kCCSuccess else { return nil }
-        return derivedKey
+        let symKey = PBKDF2<SHA256>.deriveKey(
+            password: password,
+            salt: salt,
+            iterations: 100_000
+        )
+        return symKey.withUnsafeBytes { Data($0) }
     }
 }
 

@@ -125,6 +125,15 @@ enum TrainingGoal: String, Codable, CaseIterable {
     case control = "增强控制力"
     case recovery = "加快恢复"
     case comprehensive = "全面提升"
+
+    var icon: String {
+        switch self {
+        case .endurance: return "figure.run"
+        case .control: return "hand.point.up.fill"
+        case .recovery: return "arrow.triangle.2.circlepath"
+        case .comprehensive: return "star.fill"
+        }
+    }
 }
 
 // MARK: - Review Note Model

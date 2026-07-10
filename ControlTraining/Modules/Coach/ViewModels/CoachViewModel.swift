@@ -1,6 +1,8 @@
 import Foundation
 import Combine
 import SwiftUI
+import AVFoundation
+import UIKit
 
 // MARK: - 训练会话阶段
 

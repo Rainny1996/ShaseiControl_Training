@@ -1,0 +1,478 @@
+{
+  "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6": [
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 1. 项目基础架构搭建",
+      "status": "PENDING",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "1",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "_t": 1783683874703
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 2. 数据模型层开发",
+      "status": "PENDING",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "2",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "_t": 1783683874703
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 3. 训练方法介绍模块开发",
+      "status": "PENDING",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "3",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "_t": 1783683874703
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 4. 实时陪练模块开发",
+      "status": "PENDING",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "4",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "_t": 1783683874703
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 5. 个人计划制定模块开发",
+      "status": "PENDING",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "5",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "_t": 1783683874703
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 6. 每日打卡模块开发",
+      "status": "PENDING",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "6",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "_t": 1783683874703
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 7. 复盘功能模块开发",
+      "status": "PENDING",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "7",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "_t": 1783683874703
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 8. 当前状态分析模块开发",
+      "status": "PENDING",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "8",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "_t": 1783683874703
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 9. 隐私安全模块开发",
+      "status": "PENDING",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "9",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "_t": 1783683874703
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 10. 首页与整体集成",
+      "status": "PENDING",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "10",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "_t": 1783683874703
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 11. 测试与优化",
+      "status": "PENDING",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "11",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "_t": 1783683874703
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 12. 应用发布准备",
+      "status": "PENDING",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "12",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "_t": 1783683874703
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 1. 项目基础架构搭建",
+      "status": "IN_PROGRESS",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "1",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "id": "spec-ejaculation-control-training-ios-1-1783683874944",
+      "_t": 1783683876460,
+      "symbolSpecTaskKey": "spec-ejaculation-control-training-ios-1-1783683874944",
+      "content": "执行任务（ejaculation-control-training-ios）: 1. 项目基础架构搭建",
+      "specTaskKey": "spec-ejaculation-control-training-ios-1-1783683874944"
+    },
+    {
+      "message": "项目基础架构搭建",
+      "status": "IN_PROGRESS",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "1",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "_from": "specTask",
+      "_t": 1783683881730
+    },
+    {
+      "message": "项目基础架构搭建",
+      "status": "FINISHED",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "1",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "_from": "specTask",
+      "_t": 1783684311932
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 1. 项目基础架构搭建",
+      "status": "FINISHED",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "1",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "id": "spec-ejaculation-control-training-ios-1-1783683874944",
+      "_t": 1783684312406,
+      "symbolSpecTaskKey": "spec-ejaculation-control-training-ios-1-1783683874944",
+      "content": "执行任务（ejaculation-control-training-ios）: 1. 项目基础架构搭建",
+      "specTaskKey": "spec-ejaculation-control-training-ios-1-1783683874944"
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 2. 数据模型层开发",
+      "status": "IN_PROGRESS",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "2",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "id": "spec-ejaculation-control-training-ios-2-1783683874944",
+      "_t": 1783684313451,
+      "symbolSpecTaskKey": "spec-ejaculation-control-training-ios-2-1783683874944",
+      "content": "执行任务（ejaculation-control-training-ios）: 2. 数据模型层开发",
+      "specTaskKey": "spec-ejaculation-control-training-ios-2-1783683874944"
+    },
+    {
+      "message": "数据模型层开发",
+      "status": "IN_PROGRESS",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "2",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "_from": "specTask",
+      "_t": 1783684353268
+    },
+    {
+      "message": "数据模型层开发",
+      "status": "FINISHED",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "2",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "_from": "specTask",
+      "_t": 1783685091099
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 2. 数据模型层开发",
+      "status": "FINISHED",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "2",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "id": "spec-ejaculation-control-training-ios-2-1783683874944",
+      "_t": 1783685091637,
+      "symbolSpecTaskKey": "spec-ejaculation-control-training-ios-2-1783683874944",
+      "content": "执行任务（ejaculation-control-training-ios）: 2. 数据模型层开发",
+      "specTaskKey": "spec-ejaculation-control-training-ios-2-1783683874944"
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 3. 训练方法介绍模块开发",
+      "status": "IN_PROGRESS",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "3",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "id": "spec-ejaculation-control-training-ios-3-1783683874944",
+      "_t": 1783685093175,
+      "symbolSpecTaskKey": "spec-ejaculation-control-training-ios-3-1783683874944",
+      "content": "执行任务（ejaculation-control-training-ios）: 3. 训练方法介绍模块开发",
+      "specTaskKey": "spec-ejaculation-control-training-ios-3-1783683874944"
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 3. 训练方法介绍模块开发",
+      "status": "FINISHED",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "3",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "id": "spec-ejaculation-control-training-ios-3-1783683874944",
+      "_t": 1783685164320,
+      "symbolSpecTaskKey": "spec-ejaculation-control-training-ios-3-1783683874944",
+      "content": "执行任务（ejaculation-control-training-ios）: 3. 训练方法介绍模块开发",
+      "specTaskKey": "spec-ejaculation-control-training-ios-3-1783683874944"
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 4. 实时陪练模块开发",
+      "status": "IN_PROGRESS",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "4",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "id": "spec-ejaculation-control-training-ios-4-1783683874944",
+      "_t": 1783685165894,
+      "symbolSpecTaskKey": "spec-ejaculation-control-training-ios-4-1783683874944",
+      "content": "执行任务（ejaculation-control-training-ios）: 4. 实时陪练模块开发",
+      "specTaskKey": "spec-ejaculation-control-training-ios-4-1783683874944"
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 4. 实时陪练模块开发",
+      "status": "FINISHED",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "4",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "id": "spec-ejaculation-control-training-ios-4-1783683874944",
+      "_t": 1783685602608,
+      "symbolSpecTaskKey": "spec-ejaculation-control-training-ios-4-1783683874944",
+      "content": "执行任务（ejaculation-control-training-ios）: 4. 实时陪练模块开发",
+      "specTaskKey": "spec-ejaculation-control-training-ios-4-1783683874944"
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 5. 个人计划制定模块开发",
+      "status": "IN_PROGRESS",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "5",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "id": "spec-ejaculation-control-training-ios-5-1783683874944",
+      "_t": 1783685604093,
+      "symbolSpecTaskKey": "spec-ejaculation-control-training-ios-5-1783683874944",
+      "content": "执行任务（ejaculation-control-training-ios）: 5. 个人计划制定模块开发",
+      "specTaskKey": "spec-ejaculation-control-training-ios-5-1783683874944"
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 5. 个人计划制定模块开发",
+      "status": "FINISHED",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "5",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "id": "spec-ejaculation-control-training-ios-5-1783683874944",
+      "_t": 1783686497811,
+      "symbolSpecTaskKey": "spec-ejaculation-control-training-ios-5-1783683874944",
+      "content": "执行任务（ejaculation-control-training-ios）: 5. 个人计划制定模块开发",
+      "specTaskKey": "spec-ejaculation-control-training-ios-5-1783683874944"
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 6. 每日打卡模块开发",
+      "status": "IN_PROGRESS",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "6",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "id": "spec-ejaculation-control-training-ios-6-1783683874944",
+      "_t": 1783686499374,
+      "symbolSpecTaskKey": "spec-ejaculation-control-training-ios-6-1783683874944",
+      "content": "执行任务（ejaculation-control-training-ios）: 6. 每日打卡模块开发",
+      "specTaskKey": "spec-ejaculation-control-training-ios-6-1783683874944"
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 6. 每日打卡模块开发",
+      "status": "FINISHED",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "6",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "id": "spec-ejaculation-control-training-ios-6-1783683874944",
+      "_t": 1783686934046,
+      "symbolSpecTaskKey": "spec-ejaculation-control-training-ios-6-1783683874944",
+      "content": "执行任务（ejaculation-control-training-ios）: 6. 每日打卡模块开发",
+      "specTaskKey": "spec-ejaculation-control-training-ios-6-1783683874944"
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 7. 复盘功能模块开发",
+      "status": "IN_PROGRESS",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "7",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "id": "spec-ejaculation-control-training-ios-7-1783683874944",
+      "_t": 1783686935633,
+      "symbolSpecTaskKey": "spec-ejaculation-control-training-ios-7-1783683874944",
+      "content": "执行任务（ejaculation-control-training-ios）: 7. 复盘功能模块开发",
+      "specTaskKey": "spec-ejaculation-control-training-ios-7-1783683874944"
+    },
+    {
+      "message": "复盘功能模块开发",
+      "status": "IN_PROGRESS",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "7",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "_from": "specTask",
+      "_t": 1783686942317
+    },
+    {
+      "message": "复盘功能模块开发",
+      "status": "FINISHED",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "7",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "_from": "specTask",
+      "_t": 1783687558446
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 7. 复盘功能模块开发",
+      "status": "FINISHED",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "7",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "id": "spec-ejaculation-control-training-ios-7-1783683874944",
+      "_t": 1783687559012,
+      "symbolSpecTaskKey": "spec-ejaculation-control-training-ios-7-1783683874944",
+      "content": "执行任务（ejaculation-control-training-ios）: 7. 复盘功能模块开发",
+      "specTaskKey": "spec-ejaculation-control-training-ios-7-1783683874944"
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 8. 当前状态分析模块开发",
+      "status": "IN_PROGRESS",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "8",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "id": "spec-ejaculation-control-training-ios-8-1783683874944",
+      "_t": 1783687560506,
+      "symbolSpecTaskKey": "spec-ejaculation-control-training-ios-8-1783683874944",
+      "content": "执行任务（ejaculation-control-training-ios）: 8. 当前状态分析模块开发",
+      "specTaskKey": "spec-ejaculation-control-training-ios-8-1783683874944"
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 8. 当前状态分析模块开发",
+      "status": "FINISHED",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "8",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "id": "spec-ejaculation-control-training-ios-8-1783683874944",
+      "_t": 1783688367753,
+      "symbolSpecTaskKey": "spec-ejaculation-control-training-ios-8-1783683874944",
+      "content": "执行任务（ejaculation-control-training-ios）: 8. 当前状态分析模块开发",
+      "specTaskKey": "spec-ejaculation-control-training-ios-8-1783683874944"
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 9. 隐私安全模块开发",
+      "status": "IN_PROGRESS",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "9",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "id": "spec-ejaculation-control-training-ios-9-1783683874944",
+      "_t": 1783688369200,
+      "symbolSpecTaskKey": "spec-ejaculation-control-training-ios-9-1783683874944",
+      "content": "执行任务（ejaculation-control-training-ios）: 9. 隐私安全模块开发",
+      "specTaskKey": "spec-ejaculation-control-training-ios-9-1783683874944"
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 9. 隐私安全模块开发",
+      "status": "FINISHED",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "9",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "id": "spec-ejaculation-control-training-ios-9-1783683874944",
+      "_t": 1783688861274,
+      "symbolSpecTaskKey": "spec-ejaculation-control-training-ios-9-1783683874944",
+      "content": "执行任务（ejaculation-control-training-ios）: 9. 隐私安全模块开发",
+      "specTaskKey": "spec-ejaculation-control-training-ios-9-1783683874944"
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 10. 首页与整体集成",
+      "status": "IN_PROGRESS",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "10",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "id": "spec-ejaculation-control-training-ios-10-1783683874944",
+      "_t": 1783688862842,
+      "symbolSpecTaskKey": "spec-ejaculation-control-training-ios-10-1783683874944",
+      "content": "执行任务（ejaculation-control-training-ios）: 10. 首页与整体集成",
+      "specTaskKey": "spec-ejaculation-control-training-ios-10-1783683874944"
+    },
+    {
+      "message": "首页与整体集成",
+      "status": "IN_PROGRESS",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "10",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "_from": "specTask",
+      "_t": 1783688871003
+    },
+    {
+      "message": "首页与整体集成",
+      "status": "FINISHED",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "10",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "_from": "specTask",
+      "_t": 1783689400126
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 10. 首页与整体集成",
+      "status": "FINISHED",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "10",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "id": "spec-ejaculation-control-training-ios-10-1783683874944",
+      "_t": 1783689400749,
+      "symbolSpecTaskKey": "spec-ejaculation-control-training-ios-10-1783683874944",
+      "content": "执行任务（ejaculation-control-training-ios）: 10. 首页与整体集成",
+      "specTaskKey": "spec-ejaculation-control-training-ios-10-1783683874944"
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 11. 测试与优化",
+      "status": "IN_PROGRESS",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "11",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "id": "spec-ejaculation-control-training-ios-11-1783683874944",
+      "_t": 1783689402178,
+      "symbolSpecTaskKey": "spec-ejaculation-control-training-ios-11-1783683874944",
+      "content": "执行任务（ejaculation-control-training-ios）: 11. 测试与优化",
+      "specTaskKey": "spec-ejaculation-control-training-ios-11-1783683874944"
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 11. 测试与优化",
+      "status": "FINISHED",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "11",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "id": "spec-ejaculation-control-training-ios-11-1783683874944",
+      "_t": 1783691043047,
+      "symbolSpecTaskKey": "spec-ejaculation-control-training-ios-11-1783683874944",
+      "content": "执行任务（ejaculation-control-training-ios）: 11. 测试与优化",
+      "specTaskKey": "spec-ejaculation-control-training-ios-11-1783683874944"
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 12. 应用发布准备",
+      "status": "IN_PROGRESS",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "12",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "id": "spec-ejaculation-control-training-ios-12-1783683874944",
+      "_t": 1783691045616,
+      "symbolSpecTaskKey": "spec-ejaculation-control-training-ios-12-1783683874944",
+      "content": "执行任务（ejaculation-control-training-ios）: 12. 应用发布准备",
+      "specTaskKey": "spec-ejaculation-control-training-ios-12-1783683874944"
+    },
+    {
+      "message": "应用发布准备",
+      "status": "IN_PROGRESS",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "12",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "_from": "specTask",
+      "_t": 1783691052889
+    },
+    {
+      "message": "应用发布准备",
+      "status": "FINISHED",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "12",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "_from": "specTask",
+      "_t": 1783691645426
+    },
+    {
+      "message": "执行任务（ejaculation-control-training-ios）: 12. 应用发布准备",
+      "status": "FINISHED",
+      "specName": "ejaculation-control-training-ios",
+      "specTaskId": "12",
+      "chatId": "task-86ffd3a8-9fbc-4581-b5bf-8fe00627dba6",
+      "id": "spec-ejaculation-control-training-ios-12-1783683874944",
+      "_t": 1783691646598,
+      "symbolSpecTaskKey": "spec-ejaculation-control-training-ios-12-1783683874944",
+      "content": "执行任务（ejaculation-control-training-ios）: 12. 应用发布准备",
+      "specTaskKey": "spec-ejaculation-control-training-ios-12-1783683874944"
+    }
+  ]
+}

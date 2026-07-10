@@ -25,14 +25,14 @@ extension CDAbilityProfile {
     /// 转换为领域模型
     func toDomainModel() -> AbilityProfile {
         return AbilityProfile(
-            id: id,
+            id: id!,
             overallScore: Int(overallScore),
             endurance: endurance,
             control: control,
             recovery: recovery,
             breathCoordination: breathCoordination,
             muscleStrength: muscleStrength,
-            lastUpdated: lastUpdated
+            lastUpdated: lastUpdated!
         )
     }
 }

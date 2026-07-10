@@ -204,7 +204,7 @@ class CoachViewModel: ObservableObject {
         
         while elapsed < totalDuration {
             // 收缩-放松循环
-            for i in 0..<cyclesPerSet {
+            for _ in 0..<cyclesPerSet {
                 if elapsed >= totalDuration { break }
                 
                 // 收缩

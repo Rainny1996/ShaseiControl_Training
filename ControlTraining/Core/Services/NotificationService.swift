@@ -1,5 +1,6 @@
 import Foundation
 import UserNotifications
+import UIKit
 
 /// 通知服务，负责本地通知管理
 class NotificationService {

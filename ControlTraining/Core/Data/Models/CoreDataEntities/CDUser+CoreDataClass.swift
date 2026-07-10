@@ -21,8 +21,8 @@ extension CDUser {
     /// 转换为领域模型
     func toDomainModel() -> UserProfile {
         return UserProfile(
-            id: id,
-            createdAt: createdAt,
+            id: id!,
+            createdAt: createdAt!,
             assessmentCompleted: assessmentCompleted,
             name: name ?? "",
             age: Int(age)

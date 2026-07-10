@@ -16,7 +16,7 @@ struct PrivacySettingsView: View {
     var body: some View {
         Form {
             // MARK: - 认证方式
-            Section(header: Text("认证方式")) {
+            Section(header: Text("认证方式"), content: {
                 // 生物识别
                 if SecurityService.shared.isBiometricAvailable {
                     Toggle(biometricName, isOn: $useFaceID)
@@ -60,7 +60,7 @@ struct PrivacySettingsView: View {
             
             // MARK: - 密码管理
             if isPasswordEnabled {
-                Section(header: Text("密码管理")) {
+                Section(header: Text("密码管理"), content: {
                     Button(action: { showChangePassword = true }) {
                         HStack {
                             Label("修改密码", systemImage: "pencil")
@@ -81,7 +81,7 @@ struct PrivacySettingsView: View {
             }
             
             // MARK: - 隐私保护
-            Section(header: Text("隐私保护")) {
+            Section(header: Text("隐私保护"), content: {
                 Toggle("后台模糊保护", isOn: $isBlurEnabled)
                     .onChange(of: isBlurEnabled) { newValue in
                         SecurityService.shared.isBlurProtectionEnabled = newValue
@@ -91,7 +91,7 @@ struct PrivacySettingsView: View {
             }
             
             // MARK: - 数据安全
-            Section(header: Text("数据安全")) {
+            Section(header: Text("数据安全"), content: {
                 HStack {
                     Label("数据加密", systemImage: "lock.shield")
                     Spacer()
@@ -112,7 +112,7 @@ struct PrivacySettingsView: View {
             }
             
             // MARK: - 关于隐私
-            Section(header: Text("关于")) {
+            Section(header: Text("关于"), content: {
                 NavigationLink(destination: PrivacyPolicyView()) {
                     HStack {
                         Text("隐私政策")

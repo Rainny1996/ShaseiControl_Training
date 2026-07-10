@@ -182,9 +182,10 @@ class ReviewService {
             Double(records.map { $0.selfRating }.reduce(0, +)) / Double(records.count)
         
         // 训练类型分布
-        let categoryDistribution = Dictionary(grouping: records) { $0.methodId }
+        let categoryDistributionRaw = Dictionary(grouping: records) { $0.methodId }
             .mapValues { $0.count }
             .sorted { $0.value > $1.value }
+        let categoryDistribution = Dictionary(uniqueKeysWithValues: categoryDistributionRaw)
         
         // 进步亮点
         let highlights = generateHighlights(records: records, reviewStats: reviewStats)

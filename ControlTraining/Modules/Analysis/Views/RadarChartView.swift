@@ -134,8 +134,8 @@ struct RadarGridShape: Shape {
         for index in 0..<sides {
             let angle = -Double.pi / 2 + (Double(index) / Double(sides)) * 2 * Double.pi
             let point = CGPoint(
-                x: center.x + cos(angle) * radius,
-                y: center.y + sin(angle) * radius
+                x: center.x + cos(CGFloat(angle)) * radius,
+                y: center.y + sin(CGFloat(angle)) * radius
             )
             
             if index == 0 {
@@ -165,8 +165,8 @@ struct RadarDataShape: Shape {
             let angle = -Double.pi / 2 + (Double(index) / Double(total)) * 2 * Double.pi
             let pointRadius = radius * CGFloat(values[index])
             let point = CGPoint(
-                x: center.x + cos(angle) * pointRadius,
-                y: center.y + sin(angle) * pointRadius
+                x: center.x + cos(CGFloat(angle)) * pointRadius,
+                y: center.y + sin(CGFloat(angle)) * pointRadius
             )
             
             if index == 0 {

@@ -20,9 +20,9 @@ extension CDCheckInRecord {
     /// 转换为领域模型
     func toDomainModel() -> CheckInRecord {
         return CheckInRecord(
-            id: id,
-            date: date,
-            checkInTime: checkInTime,
+            id: id!,
+            date: date!,
+            checkInTime: checkInTime!,
             trainingRecordId: trainingRecordId
         )
     }

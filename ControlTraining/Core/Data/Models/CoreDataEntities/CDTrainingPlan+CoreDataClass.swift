@@ -22,12 +22,12 @@ extension CDTrainingPlan {
     func toDomainModel() -> TrainingPlan {
         let items = (planItems as? Set<CDPlanItem>)?.map { $0.toDomainModel() } ?? []
         return TrainingPlan(
-            id: id,
-            startDate: startDate,
-            endDate: endDate,
+            id: id!,
+            startDate: startDate!,
+            endDate: endDate!,
             items: items,
             progress: progress,
-            goal: goal
+            goal: goal!
         )
     }
     

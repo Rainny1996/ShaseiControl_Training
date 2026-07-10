@@ -173,7 +173,7 @@ struct EncryptedField: Codable {
     
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        encryptedValue = try container.decodeIfPresent(String.self)
+        encryptedValue = try container.decodeNil() ? nil : try container.decode(String.self)
     }
     
     func encode(to encoder: Encoder) throws {

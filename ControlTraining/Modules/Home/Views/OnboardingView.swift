@@ -345,33 +345,6 @@ struct InitialSetupView: View {
     }
 }
 
-// MARK: - 训练目标枚举
-
-enum TrainingGoal: String, CaseIterable {
-    case endurance = "持久提升"
-    case control = "精准控制"
-    case recovery = "快速恢复"
-    case comprehensive = "全面提升"
-    
-    var icon: String {
-        switch self {
-        case .endurance: return "timer"
-        case .control: return "hand.tap"
-        case .recovery: return "arrow.uturn.backward"
-        case .comprehensive: return "star"
-        }
-    }
-    
-    var description: String {
-        switch self {
-        case .endurance: return "延长持续时间，增强耐力"
-        case .control: return "提升控制精度，随心所欲"
-        case .recovery: return "缩短恢复时间，快速重启"
-        case .comprehensive: return "均衡发展，全面提升"
-        }
-    }
-}
-
 // MARK: - 经验水平枚举
 
 enum ExperienceLevel: String, CaseIterable {

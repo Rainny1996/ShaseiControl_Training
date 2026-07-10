@@ -23,10 +23,10 @@ extension CDPlanItem {
     /// 转换为领域模型
     func toDomainModel() -> PlanItem {
         return PlanItem(
-            id: id,
-            date: date,
-            methodId: methodId,
-            methodName: methodName,
+            id: id!,
+            date: date!,
+            methodId: methodId!,
+            methodName: methodName!,
             duration: duration,
             isCompleted: isCompleted,
             completedAt: completedAt

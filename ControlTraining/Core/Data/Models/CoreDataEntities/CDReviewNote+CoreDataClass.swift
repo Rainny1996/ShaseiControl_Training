@@ -23,9 +23,9 @@ extension CDReviewNote {
     /// 转换为领域模型
     func toDomainModel() -> ReviewNote {
         return ReviewNote(
-            id: id,
-            trainingRecordId: trainingRecordId,
-            date: date,
+            id: id!,
+            trainingRecordId: trainingRecordId!,
+            date: date!,
             feelingScore: Int(feelingScore),
             difficultyScore: Int(difficultyScore),
             bodyReaction: bodyReaction ?? "",

@@ -37,16 +37,16 @@ extension CDTrainingMethod {
         let precautions = precautionsData.flatMap { try? JSONDecoder().decode([String].self, from: $0) } ?? []
         
         return TrainingMethod(
-            id: id,
-            name: name,
-            category: TrainingCategory(rawValue: category) ?? .kegel,
-            difficulty: DifficultyLevel(rawValue: difficulty) ?? .beginner,
-            description: methodDescription,
-            principle: principle,
+            id: id!,
+            name: name!,
+            category: TrainingCategory(rawValue: category!) ?? .kegel,
+            difficulty: DifficultyLevel(rawValue: difficulty!) ?? .beginner,
+            description: methodDescription!,
+            principle: principle!,
             steps: steps,
             precautions: precautions,
-            expectedEffect: expectedEffect,
-            targetAudience: targetAudience,
+            expectedEffect: expectedEffect!,
+            targetAudience: targetAudience!,
             defaultDuration: defaultDuration,
             isFavorite: isFavorite
         )

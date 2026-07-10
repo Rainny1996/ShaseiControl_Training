@@ -24,14 +24,14 @@ extension CDTrainingRecord {
     /// 转换为领域模型
     func toDomainModel() -> TrainingRecord {
         return TrainingRecord(
-            id: id,
-            methodId: methodId,
-            date: date,
+            id: id!,
+            methodId: methodId!,
+            date: date!,
             duration: duration,
             completionRate: completionRate,
             selfRating: Int(selfRating),
             notes: notes ?? "",
-            mode: TrainingMode(rawValue: mode) ?? .basic
+            mode: TrainingMode(rawValue: mode!) ?? .basic
         )
     }
 }

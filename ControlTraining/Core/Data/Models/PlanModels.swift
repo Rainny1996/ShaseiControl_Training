@@ -54,7 +54,7 @@ enum PlanPeriod: String, CaseIterable {
 }
 
 /// 计划项
-struct PlanItem: Identifiable {
+struct PlanItem: Identifiable, Equatable {
     let id: UUID
     let date: Date
     let methodId: UUID

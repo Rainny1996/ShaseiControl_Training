@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>男性控制训练 · Liquid Glass v0.0.1</title>
+<style>
+  /* ============================================================
+     iOS 27 Liquid Glass 设计语言预览
+     核心特征：多层透明质感 · 动态光照 · 丰富渐变渗透 · 圆润有机形态
+     版本：v0.0.1
+     ============================================================ */
+  :root {
+    /* 玻璃色板 */
+    --glass-bg: rgba(255,255,255,.06);
+    --glass-bg-2: rgba(255,255,255,.10);
+    --glass-bg-3: rgba(255,255,255,.16);
+    --glass-mid: rgba(255,255,255,.04);
+    --glass-border: rgba(255,255,255,.08);
+    --glass-border-hi: rgba(255,255,255,.14);
+    --glass-edge: rgba(255,255,255,.04);
+
+    /* 主色 - 青绿渐变（健康/专业） */
+    --accent-1: #00D4AA;
+    --accent-2: #00B8D4;
+    --accent-grad: linear-gradient(135deg, #00D4AA 0%, #00B8D4 100%);
+    --accent-grad-2: linear-gradient(135deg, #00E5C7 0%, #00C4E5 100%);
+
+    /* 点缀色 - 紫粉/珊瑚 */
+    --violet: #A78BFA;
+    --pink: #F472B6;
+    --coral: #FF7A59;
+    --amber: #FBBF24;
+    --grad-violet: linear-gradient(135deg, #A78BFA 0%, #7C3AED 100%);
+    --grad-pink: linear-gradient(135deg, #F472B6 0%, #EC4899 100%);
+    --grad-coral: linear-gradient(135deg, #FF8C6B 0%, #FF5A3A 100%);
+
+    /* 文字 */
+    --text: rgba(255,255,255,.95);
+    --text-2: rgba(255,255,255,.75);
+    --text-3: rgba(255,255,255,.50);
+    --text-dim: rgba(255,255,255,.35);
+
+    /* 功能色 */
+    --green: #34D399;
+    --green-bg: rgba(52,211,153,.18);
+    --red: #F87171;
+    --red-bg: rgba(248,113,113,.16);
+    --amber-bg: rgba(251,191,36,.16);
+
+    /* 布局 */
+    --radius-sm: 10px;
+    --radius-md: 16px;
+    --radius-lg: 22px;
+    --radius-xl: 28px;
+    --radius-glass: 24px;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;overflow:hidden;}
+  body{
+    font-family:"SF Pro Display","PingFang SC","Helvetica Neue",system-ui,-apple-system,sans-serif;
+    background:#0a0b14;
+    color:var(--text);
+    display:flex;justify-content:center;align-items:center;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+
+  /* ===== iPhone 外框 ===== */
+  .phone{
+    width:390px;height:844px;background:#0c0e17;
+    border-radius:56px;
+    padding:14px;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,.06),
+      0 30px 80px rgba(0,0,0,.7),
+      0 0 120px rgba(0,212,170,.04);
+    position:relative;flex:0 0 auto;
+  }
+  .screen{
+    width:100%;height:100%;
+    border-radius:42px;overflow:hidden;
+    position:relative;display:flex;flex-direction:column;
+    background:#0d0f1a;
+  }
+  /* 背景动态渐变动画层 */
+  .bg-anim{
+    position:absolute;inset:0;
+    background:
+      radial-gradient(600px 500px at 15% 20%, rgba(0,212,170,.12) 0%, transparent 70%),
+      radial-gradient(500px 400px at 85% 35%, rgba(167,139,250,.08) 0%, transparent 60%),
+      radial-gradient(400px 300px at 50% 85%, rgba(244,114,182,.06) 0%, transparent 50%),
+      radial-gradient(300px 250px at 30% 60%, rgba(0,184,212,.04) 0%, transparent 50%),
+      linear-gradient(180deg, #0d0f1a 0%, #0f1324 40%, #0d0f1a 100%);
+    z-index:0;
+    animation:bg-shift 20s ease-in-out infinite alternate;
+  }
+  @keyframes bg-shift{
+    0%{background-position:0% 0%, 100% 0%, 50% 100%, 30% 60%, 0% 0%;}
+    50%{background-position:20% 10%, 70% 20%, 40% 80%, 50% 50%, 0% 0%;}
+    100%{background-position:10% 30%, 60% 10%, 30% 90%, 20% 40%, 0% 0%;}
+  }
+
+  /* 动态岛 */
+  .dynamic-island{
+    position:absolute;top:10px;left:50%;transform:translateX(-50%);
+    width:126px;height:36px;
+    background:rgba(20,22,30,.95);
+    border-radius:20px;
+    z-index:50;
+    box-shadow:
+      inset 0 0 0 1px rgba(255,255,255,.06),
+      0 4px 12px rgba(0,0,0,.3);
+    display:flex;align-items:center;justify-content:center;
+    gap:6px;
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+  }
+  .dynamic-island .dot{
+    width:4px;height:4px;border-radius:50%;
+    background:rgba(255,255,255,.3);
+  }
+  .dynamic-island .pill{
+    width:36px;height:10px;border-radius:5px;
+    background:rgba(255,255,255,.08);
+  }
+
+  /* 状态栏 */
+  .statusbar{
+    position:relative;z-index:40;
+    height:50px;display:flex;align-items:center;
+    justify-content:space-between;
+    padding:0 20px;font-size:13px;font-weight:600;
+    color:rgba(255,255,255,.85);
+    letter-spacing:.2px;
+  }
+  .statusbar .icons{display:flex;gap:4px;align-items:center;}
+  .statusbar svg{display:block;fill:rgba(255,255,255,.85);}
+
+  /* ===== 玻璃面板（通用卡片） ===== */
+  .glass{
+    background:var(--glass-bg-2);
+    backdrop-filter:blur(50px) saturate(1.3);
+    -webkit-backdrop-filter:blur(50px) saturate(1.3);
+    border-radius:var(--radius-glass);
+    border:1px solid var(--glass-border);
+    box-shadow:
+      0 4px 24px rgba(0,0,0,.2),
+      inset 0 1px 0 var(--glass-edge);
+    padding:18px;
+    margin-bottom:12px;
+    position:relative;
+    overflow:hidden;
+  }
+  /* 玻璃面板光照效果 */
+  .glass::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:1px;
+    background:linear-gradient(90deg, transparent 0%, rgba(255,255,255,.06) 30%, rgba(255,255,255,.10) 50%, rgba(255,255,255,.06) 70%, transparent 100%);
+  }
+  .glass::after{
+    content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+    background:linear-gradient(180deg, rgba(255,255,255,.02) 0%, transparent 60%);
+    pointer-events:none;
+    border-radius:inherit;
+  }
+  .glass.tinted{
+    background:linear-gradient(135deg, rgba(0,212,170,.12) 0%, rgba(0,184,212,.06) 100%);
+    border-color:rgba(0,212,170,.15);
+  }
+  .glass.tinted::after{
+    background:linear-gradient(180deg, rgba(0,212,170,.04) 0%, transparent 60%);
+  }
+
+  /* 玻璃等级卡片（深色玻璃） */
+  .glass-deep{
+    background:rgba(255,255,255,.14);
+    backdrop-filter:blur(60px) saturate(1.4);
+    -webkit-backdrop-filter:blur(60px) saturate(1.4);
+    border:1px solid var(--glass-border-hi);
+  }
+
+  /* ===== 滚动区 ===== */
+  .scroll{
+    flex:1;overflow-y:auto;overflow-x:hidden;
+    padding:4px 16px 96px;
+    -webkit-overflow-scrolling:touch;
+    position:relative;z-index:10;
+  }
+  .scroll::-webkit-scrollbar{display:none;}
+  .scroll.no-tab{padding-bottom:20px;}
+
+  /* ===== 顶部栏 ===== */
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 0 14px;margin-bottom:4px;
+  }
+  .topbar h1{
+    font-size:24px;font-weight:700;
+    letter-spacing:-.5px;
+    background:linear-gradient(135deg, #fff 60%, rgba(255,255,255,.6));
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+  }
+  .topbar .sub{font-size:12px;color:var(--text-3);margin-top:2px;letter-spacing:.2px;}
+  .avatar-glass{
+    width:42px;height:42px;border-radius:50%;
+    background:linear-gradient(135deg, rgba(0,212,170,.25), rgba(167,139,250,.15));
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,.10);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--accent-1);font-weight:700;font-size:16px;
+    font-family:system-ui;
+    box-shadow:0 4px 12px rgba(0,0,0,.15);
+    cursor:pointer;
+    transition:transform .15s ease, box-shadow .2s ease;
+  }
+  .avatar-glass:active{transform:scale(.94);}
+
+  /* ===== 任务卡片 ===== */
+  .task-item{
+    display:flex;align-items:center;gap:12px;
+    padding:12px 14px;
+    background:rgba(255,255,255,.04);
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,.04);
+    margin-bottom:8px;
+    transition:background .2s;
+    cursor:pointer;
+  }
+  .task-item:active{background:rgba(255,255,255,.08);}
+  .task-check{
+    width:26px;height:26px;border-radius:8px;
+    border:1.5px solid rgba(255,255,255,.2);
+    flex:0 0 auto;
+    display:flex;align-items:center;justify-content:center;
+    font-size:14px;color:transparent;
+    transition:.25s;
+  }
+  .task-check.done{
+    background:var(--accent-grad);
+    border-color:transparent;
+    color:#fff;
+    box-shadow:0 2px 8px rgba(0,212,170,.3);
+  }
+  .task-label{flex:1;font-size:14px;font-weight:500;color:var(--text-2);}
+  .task-label.done{color:var(--text-3);text-decoration:line-through;}
+
+  /* ===== 标签/徽章 ===== */
+  .badge{
+    display:inline-flex;align-items:center;gap:5px;
+    font-size:11px;font-weight:600;
+    padding:4px 10px;border-radius:999px;
+    letter-spacing:.2px;
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+    border:1px solid rgba(255,255,255,.06);
+  }
+  .badge.teal{background:rgba(0,212,170,.18);color:var(--accent-1);}
+  .badge.coral{background:rgba(255,122,89,.18);color:var(--coral);}
+  .badge.amber{background:rgba(251,191,36,.16);color:var(--amber);}
+  .badge.green{background:rgba(52,211,153,.16);color:var(--green);}
+  .badge.violet{background:rgba(167,139,250,.16);color:var(--violet);}
+  .badge.white{background:rgba(255,255,255,.10);color:var(--text-2);}
+
+  /* ===== 按钮 ===== */
+  .btn-glass{
+    appearance:none;border:none;font-family:inherit;
+    font-size:15px;font-weight:600;
+    padding:14px 20px;border-radius:14px;
+    width:100%;cursor:pointer;
+    transition:transform .1s ease, box-shadow .2s ease;
+    display:flex;align-items:center;justify-content:center;gap:6px;
+  }
+  .btn-glass:active{transform:scale(.97);}
+  .btn-glass.primary{
+    background:var(--accent-grad);
+    color:#fff;
+    box-shadow:0 6px 20px rgba(0,212,170,.25);
+  }
+  .btn-glass.primary:active{box-shadow:0 3px 10px rgba(0,212,170,.15);}
+  .btn-glass.coral{
+    background:var(--grad-coral);
+    color:#fff;
+    box-shadow:0 6px 20px rgba(255,122,89,.25);
+  }
+  .btn-glass.glass{
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(30px);
+    -webkit-backdrop-filter:blur(30px);
+    border:1px solid rgba(255,255,255,.08);
+    color:var(--text);
+    box-shadow:0 4px 14px rgba(0,0,0,.15);
+  }
+
+  /* ===== 统计网格 ===== */
+  .stats-glass{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
+  }
+  .stat-glass{
+    background:rgba(255,255,255,.06);
+    backdrop-filter:blur(30px);
+    -webkit-backdrop-filter:blur(30px);
+    border-radius:16px;
+    padding:14px 8px;text-align:center;
+    border:1px solid rgba(255,255,255,.04);
+    position:relative;overflow:hidden;
+  }
+  .stat-glass::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:1px;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,.06), transparent);
+  }
+  .stat-glass .num{
+    font-size:24px;font-weight:800;
+    background:var(--accent-grad);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+    letter-spacing:-.5px;
+  }
+  .stat-glass .cap{font-size:11px;color:var(--text-3);margin-top:4px;letter-spacing:.2px;}
+
+  /* ===== 热力图 ===== */
+  .heat{
+    display:grid;grid-template-columns:repeat(14,1fr);gap:4px;
+  }
+  .heat .d{
+    aspect-ratio:1;border-radius:5px;
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.03);
+    transition:.25s;
+  }
+  .heat .d.l1{background:rgba(0,212,170,.15);border-color:rgba(0,212,170,.08);}
+  .heat .d.l2{background:rgba(0,212,170,.30);border-color:rgba(0,212,170,.12);}
+  .heat .d.l3{background:rgba(0,212,170,.50);border-color:rgba(0,212,170,.15);}
+  .heat .d.l4{background:rgba(0,212,170,.75);border-color:rgba(0,212,170,.20);}
+  .heat .d.today{
+    outline:2px solid var(--coral);
+    outline-offset:-1px;
+    box-shadow:0 0 12px rgba(255,122,89,.2);
+  }
+
+  /* ===== 训练方法列表 ===== */
+  .method-glass{
+    display:flex;align-items:center;gap:14px;
+    padding:14px 16px;
+    background:rgba(255,255,255,.04);
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,.04);
+    margin-bottom:10px;
+    cursor:pointer;
+    transition:.2s;
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+  }
+  .method-glass:active{background:rgba(255,255,255,.08);}
+  .method-glass .ico{
+    width:46px;height:46px;border-radius:14px;
+    background:rgba(0,212,170,.12);
+    border:1px solid rgba(0,212,170,.10);
+    display:flex;align-items:center;justify-content:center;
+    font-size:20px;flex:0 0 auto;
+  }
+  .method-glass .t{font-size:15px;font-weight:600;color:var(--text);}
+  .method-glass .d{font-size:12px;color:var(--text-3);margin-top:3px;letter-spacing:.1px;}
+  .diff-badge{
+    font-size:10.5px;font-weight:600;padding:3px 9px;
+    border-radius:6px;letter-spacing:.2px;
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+    border:1px solid rgba(255,255,255,.05);
+  }
+  .diff-badge.b{background:rgba(0,212,170,.15);color:var(--accent-1);}
+  .diff-badge.m{background:rgba(251,191,36,.15);color:var(--amber);}
+  .diff-badge.h{background:rgba(248,113,113,.15);color:var(--red);}
+
+  /* ===== 底部 TAB ===== */
+  .tabbar{
+    position:absolute;left:0;right:0;bottom:0;height:78px;
+    background:rgba(12,14,23,.85);
+    backdrop-filter:blur(60px) saturate(1.4);
+    -webkit-backdrop-filter:blur(60px) saturate(1.4);
+    border-top:1px solid rgba(255,255,255,.05);
+    display:flex;padding:8px 4px 18px;
+    z-index:40;
+  }
+  .tab{
+    flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;
+    color:var(--text-3);font-size:10px;font-weight:500;
+    cursor:pointer;background:none;border:none;font-family:inherit;
+    letter-spacing:.2px;
+    padding:4px 0;
+    transition:.2s;
+    position:relative;
+  }
+  .tab.active{
+    color:var(--accent-1);
+  }
+  .tab svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.5;}
+  .tab.active svg{stroke-width:2;}
+  .tab-indicator{
+    position:absolute;top:0;left:50%;transform:translateX(-50%);
+    width:20px;height:2.5px;
+    background:var(--accent-grad);
+    border-radius:0 0 3px 3px;
+    opacity:0;
+    transition:.25s;
+  }
+  .tab.active .tab-indicator{opacity:1;}
+
+  /* ===== 全屏覆盖层 ===== */
+  .overlay-glass{
+    position:absolute;inset:0;
+    background:rgba(10,11,20,.95);
+    backdrop-filter:blur(30px);
+    -webkit-backdrop-filter:blur(30px);
+    z-index:60;display:none;flex-direction:column;
+  }
+  .overlay-glass.show{display:flex;animation:ovFadeIn .3s ease;}
+  @keyframes ovFadeIn{from{opacity:0}to{opacity:1}}
+  .ov-top-glass{
+    display:flex;align-items:center;
+    justify-content:space-between;
+    padding:14px 16px 6px;
+    position:relative;z-index:10;
+  }
+  .ov-top-glass .title{
+    font-size:16px;font-weight:600;
+    color:var(--text-2);letter-spacing:.2px;
+  }
+  .ov-back-glass{
+    background:rgba(255,255,255,.06);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,.06);
+    border-radius:10px;
+    padding:7px 12px;
+    font-size:13px;font-weight:600;
+    font-family:inherit;
+    color:var(--text-2);
+    cursor:pointer;
+    display:flex;align-items:center;gap:4px;
+    transition:.15s;
+  }
+  .ov-back-glass:active{background:rgba(255,255,255,.10);}
+
+  /* ===== 陪练呼吸 ===== */
+  .breathe-wrap-glass{
+    flex:1;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:24px;
+    position:relative;
+  }
+  /* 呼吸光圈多层 */
+  .breath-ring{
+    position:relative;width:220px;height:220px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .breath-ring .ring{
+    position:absolute;inset:0;border-radius:50%;
+    border:1px solid rgba(0,212,170,.08);
+    animation:ringPulse 8s ease-in-out infinite;
+  }
+  .breath-ring .ring:nth-child(2){inset:12px;animation-delay:-2s;border-color:rgba(167,139,250,.06);}
+  .breath-ring .ring:nth-child(3){inset:24px;animation-delay:-4s;border-color:rgba(255,122,89,.06);}
+  @keyframes ringPulse{
+    0%,100%{transform:scale(1);opacity:.5;}
+    50%{transform:scale(1.12);opacity:1;}
+  }
+  .breath-core{
+    width:160px;height:160px;border-radius:50%;
+    background:radial-gradient(circle at 45% 35%, rgba(0,229,199,.6), rgba(0,184,212,.2));
+    box-shadow:
+      0 0 40px rgba(0,212,170,.15),
+      0 0 80px rgba(0,212,170,.08),
+      inset 0 0 60px rgba(255,255,255,.02);
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-size:16px;font-weight:700;
+    text-align:center;
+    animation:breathCore 8s ease-in-out infinite;
+    backdrop-filter:blur(4px);
+    -webkit-backdrop-filter:blur(4px);
+    border:1px solid rgba(255,255,255,.06);
+  }
+  @keyframes breathCore{
+    0%,100%{transform:scale(.82);box-shadow:0 0 30px rgba(0,212,170,.10),0 0 60px rgba(0,212,170,.04);}
+    50%{transform:scale(1.06);box-shadow:0 0 50px rgba(0,212,170,.20),0 0 100px rgba(0,212,170,.10);}
+  }
+  .stage-tag-glass{
+    font-size:13px;font-weight:600;
+    color:var(--accent-1);
+    background:rgba(0,212,170,.10);
+    border:1px solid rgba(0,212,170,.10);
+    padding:6px 16px;border-radius:999px;
+    letter-spacing:.3px;
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+  }
+  .timer-big-glass{
+    font-size:52px;font-weight:700;
+    font-variant-numeric:tabular-nums;
+    letter-spacing:2px;
+    background:var(--accent-grad);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+  }
+  .ctrl-row-glass{
+    display:flex;gap:16px;
+    padding:18px 18px 34px;
+    justify-content:center;
+    position:relative;z-index:10;
+  }
+  .ctrl-glass{
+    width:64px;height:64px;border-radius:50%;
+    border:1px solid rgba(255,255,255,.08);
+    font-size:22px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    font-family:inherit;
+    transition:.15s;
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+  }
+  .ctrl-glass:active{transform:scale(.92);}
+  .ctrl-glass.pause-glass{
+    background:rgba(255,255,255,.12);
+    color:#fff;
+    box-shadow:0 4px 20px rgba(0,0,0,.25);
+  }
+  .ctrl-glass.stop-glass{
+    background:rgba(248,113,113,.12);
+    color:var(--red);
+    border-color:rgba(248,113,113,.15);
+  }
+
+  /* ===== 仪表盘 ===== */
+  .gauge-glass{
+    display:flex;flex-direction:column;align-items:center;gap:8px;
+  }
+  .gauge-value{
+    font-size:42px;font-weight:800;
+    background:var(--accent-grad);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+    line-height:1;
+  }
+  .gauge-label{font-size:12px;color:var(--text-3);letter-spacing:.3px;}
+  .level-glass{
+    display:inline-flex;align-items:center;gap:6px;
+    font-size:13px;font-weight:600;
+    color:var(--accent-1);
+    background:rgba(0,212,170,.10);
+    border:1px solid rgba(0,212,170,.08);
+    padding:5px 14px;border-radius:999px;
+    letter-spacing:.3px;
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+  }
+
+  /* ===== 改善建议 ===== */
+  .tip-glass{
+    background:rgba(255,122,89,.06);
+    border:1px solid rgba(255,122,89,.10);
+    border-radius:14px;
+    padding:14px;
+    font-size:13px;line-height:1.7;
+    color:var(--text-2);
+  }
+  .tip-glass b{color:var(--coral);}
+
+  /* ===== 设置列表 ===== */
+  .li-glass{
+    display:flex;align-items:center;gap:14px;
+    padding:14px 4px;
+    border-bottom:1px solid rgba(255,255,255,.04);
+  }
+  .li-glass:last-child{border-bottom:none;}
+  .li-glass .ico{
+    width:38px;height:38px;border-radius:11px;
+    background:rgba(0,212,170,.10);
+    border:1px solid rgba(0,212,170,.06);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--accent-1);flex:0 0 auto;font-size:16px;
+  }
+  .li-glass .t{font-size:15px;font-weight:500;color:var(--text);}
+  .li-glass .d{font-size:12px;color:var(--text-3);margin-top:2px;}
+  .li-glass .arrow{color:var(--text-3);font-size:18px;margin-left:auto;}
+
+  /* ===== Toggle (Liquid Glass 风格) ===== */
+  .toggle-glass{
+    width:48px;height:28px;border-radius:999px;
+    background:rgba(255,255,255,.08);
+    position:relative;
+    transition:.25s;flex:0 0 auto;
+    border:1px solid rgba(255,255,255,.04);
+  }
+  .toggle-glass.on{background:rgba(0,212,170,.35);border-color:rgba(0,212,170,.15);}
+  .toggle-glass::after{
+    content:"";position:absolute;top:2px;left:2px;
+    width:22px;height:22px;border-radius:50%;
+    background:rgba(255,255,255,.9);
+    transition:transform .25s cubic-bezier(.4,.1,.2,1);
+    box-shadow:0 1px 4px rgba(0,0,0,.2);
+  }
+  .toggle-glass.on::after{transform:translateX(20px);background:#fff;box-shadow:0 0 8px rgba(0,212,170,.2);}
+
+  /* ===== Toast ===== */
+  .toast-glass{
+    position:absolute;left:50%;bottom:96px;
+    transform:translateX(-50%) translateY(20px);
+    background:rgba(255,255,255,.12);
+    backdrop-filter:blur(50px);
+    -webkit-backdrop-filter:blur(50px);
+    border:1px solid rgba(255,255,255,.08);
+    color:#fff;font-size:13px;font-weight:500;
+    padding:12px 22px;border-radius:14px;
+    opacity:0;pointer-events:none;
+    transition:.35s cubic-bezier(.4,.1,.2,1);
+    z-index:80;white-space:nowrap;
+  }
+  .toast-glass.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  .sec-title-glass{font-size:12px;font-weight:600;color:var(--text-3);margin:6px 2px 10px;letter-spacing:.5px;text-transform:uppercase;}
+  .note-glass{font-size:11px;color:var(--text-3);line-height:1.6;margin-top:8px;}
+  .h2-glass{
+    font-size:15px;font-weight:600;
+    margin-bottom:12px;display:flex;align-items:center;gap:8px;
+    color:var(--text-2);
+  }
+  .muted-glass{color:var(--text-3);font-size:13px;line-height:1.7;}
+  .row-glass{display:flex;align-items:center;gap:12px;}
+  .between-glass{justify-content:space-between;}
+  .label-glass{font-size:11px;color:var(--text-3);letter-spacing:.3px;text-transform:uppercase;}
+  .pill-glass{
+    display:inline-flex;align-items:center;gap:5px;
+    font-size:11.5px;font-weight:600;
+    padding:4px 12px;border-radius:999px;
+    letter-spacing:.2px;
+  }
+  .pill-glass.progress{
+    background:rgba(52,211,153,.12);
+    color:var(--green);
+    border:1px solid rgba(52,211,153,.10);
+  }
+  .legend-glass{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:10px;font-size:11.5px;color:var(--text-3);}
+  .legend-glass i{width:8px;height:8px;border-radius:3px;display:inline-block;margin-right:4px;vertical-align:middle;}
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="screen">
+    <!-- 动态背景 -->
+    <div class="bg-anim"></div>
+
+    <!-- 动态岛 -->
+    <div class="dynamic-island">
+      <span class="dot"></span><span class="pill"></span><span class="dot"></span>
+    </div>
+
+    <!-- 状态栏 -->
+    <div class="statusbar">
+      <span id="clock">9:41</span>
+      <span class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2.5" width="3" height="9.5" rx="1"/><rect x="13.5" y="0" width="3" height="12" rx="1"/></svg>
+        <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 2.5c2 0 3.8 1 5 2.6l1.3-1.4C13 1.8 10.7.5 8 .5S3 1.8.7 3.7L2 5.1C3.2 3.5 5 2.5 8 2.5z"/><path d="M8 6c1.1 0 2.1.5 2.9 1.3l1.3-1.4C11 4.7 9.6 4 8 4s-3 .7-4.2 1.9l1.3 1.4C5.9 6.5 6.9 6 8 6z"/><circle cx="8" cy="10" r="1.6"/></svg>
+        <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0.5" y="0.5" width="21" height="11" rx="3" fill="none" stroke="rgba(255,255,255,.85)"/><rect x="2" y="2" width="17" height="8" rx="1.5"/><rect x="22.5" y="3.5" width="2" height="5" rx="1"/></svg>
+      </span>
+    </div>
+
+    <!-- ==================== 首页 ==================== -->
+    <div class="scroll" id="page-home">
+      <div class="topbar">
+        <div>
+          <h1>早安，训练者</h1>
+          <div class="sub" id="today-sub-g">7月11日 · 周六 · 今日 2 项</div>
+        </div>
+        <div class="avatar-glass">控</div>
+      </div>
+
+      <div class="glass tinted">
+        <div class="row-glass between-glass" style="margin-bottom:12px">
+          <div>
+            <div class="label-glass">今日训练</div>
+            <div style="font-size:17px;font-weight:600;margin-top:3px;color:var(--text)">凯格尔运动 · 呼吸训练</div>
+          </div>
+          <span class="badge coral">约 15 分钟</span>
+        </div>
+        <div class="task-item">
+          <div class="task-check done">✓</div>
+          <span class="task-label done">凯格尔运动（基础适应）</span>
+        </div>
+        <div class="task-item" id="task2-wrap">
+          <div class="task-check" id="task2-chk-g"></div>
+          <span class="task-label" id="task2-txt-g">呼吸训练（陪练模式）</span>
+        </div>
+        <button class="btn-glass coral" onclick="openCompanionG()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="8,5 19,12 8,19"/></svg>
+          开始陪练
+        </button>
+      </div>
+
+      <!-- 统计 -->
+      <div class="stats-glass">
+        <div class="stat-glass"><div class="num">12</div><div class="cap">连续打卡</div></div>
+        <div class="stat-glass"><div class="num">86%</div><div class="cap">本月打卡率</div></div>
+        <div class="stat-glass"><div class="num">68</div><div class="cap">综合评分</div></div>
+      </div>
+
+      <div class="glass" style="margin-top:4px">
+        <div class="h2-glass">📅 打卡日历</div>
+        <div class="heat" id="heat-g"></div>
+        <div class="note-glass">颜色越深代表训练强度越高 · 连续 12 天达标</div>
+      </div>
+
+      <div class="glass">
+        <div class="h2-glass">💡 今日建议</div>
+        <div class="tip-glass" style="margin-top:0">你的<b>呼吸配合</b>维度偏弱（62 分）。今日训练建议开启呼吸引导，配合深慢呼吸降低兴奋度，可显著提升控制力。</div>
+      </div>
+    </div>
+
+    <!-- ==================== 训练 ==================== -->
+    <div class="scroll" id="page-train" style="display:none">
+      <div class="topbar"><div><h1>训练方法</h1><div class="sub">科学训练 · 循序渐进</div></div></div>
+      <div class="row-glass between-glass" style="padding:0 2px 14px">
+        <span class="muted-glass">共 5 类方法 · 可筛选难度</span>
+        <span class="badge teal">全部</span>
+      </div>
+
+      <div class="method-glass" onclick="openMethodG('kegel')">
+        <div class="ico">🏋️</div>
+        <div style="flex:1"><div class="t">凯格尔运动</div><div class="d">收缩盆底肌（PC 肌）增强控制力</div></div>
+        <span class="diff-badge b">初级</span>
+      </div>
+      <div class="method-glass" onclick="openMethodG('startstop')">
+        <div class="ico">⏸️</div>
+        <div style="flex:1"><div class="t">停-动技术</div><div class="d">临界点停止刺激，待消退后继续</div></div>
+        <span class="diff-badge m">中级</span>
+      </div>
+      <div class="method-glass" onclick="openMethodG('squeeze')">
+        <div class="ico">✊</div>
+        <div style="flex:1"><div class="t">挤压技术</div><div class="d">临界点轻捏冠状沟抑制反射</div></div>
+        <span class="diff-badge m">中级</span>
+      </div>
+      <div class="method-glass" onclick="openMethodG('breath')">
+        <div class="ico">🌬️</div>
+        <div style="flex:1"><div class="t">呼吸训练</div><div class="d">深慢呼吸降低交感神经兴奋</div></div>
+        <span class="diff-badge b">初级</span>
+      </div>
+      <div class="method-glass" onclick="openMethodG('pelvic')">
+        <div class="ico">🧘</div>
+        <div style="flex:1"><div class="t">骨盆底肌训练</div><div class="d">系统性收缩/放松盆底肌群</div></div>
+        <span class="diff-badge h">高级</span>
+      </div>
+    </div>
+
+    <!-- ==================== 计划 ==================== -->
+    <div class="scroll" id="page-plan" style="display:none">
+      <div class="topbar"><div><h1>我的计划</h1><div class="sub">基于评估智能生成</div></div></div>
+      <div class="glass">
+        <div class="h2-glass">📊 本周安排</div>
+        <div class="row-glass between-glass" style="margin-bottom:10px">
+          <span class="muted-glass">已完成 4 / 7 项</span>
+          <span class="pill-glass progress">进度 57%</span>
+        </div>
+        <div style="height:6px;background:rgba(255,255,255,.06);border-radius:999px;overflow:hidden">
+          <div style="height:100%;width:57%;background:var(--accent-grad);border-radius:999px;box-shadow:0 0 8px rgba(0,212,170,.15);"></div>
+        </div>
+      </div>
+      <div class="glass">
+        <div class="h2-glass">🗓️ 周期目标</div>
+        <div class="task-item" style="margin-bottom:6px"><span class="badge green" style="min-width:70px">短期·1周</span><span class="muted-glass">适应基础训练节奏</span></div>
+        <div class="task-item" style="margin-bottom:6px"><span class="badge amber" style="min-width:70px">中期·1月</span><span class="muted-glass">引入停-动技术</span></div>
+        <div class="task-item"><span class="badge coral" style="min-width:70px">长期·3月</span><span class="muted-glass">综合控制力提升</span></div>
+      </div>
+      <div class="glass">
+        <div class="h2-glass">📋 计划模板</div>
+        <div class="method-glass" style="margin-bottom:8px"><div class="ico">🌱</div><div style="flex:1"><div class="t">新手入门</div><div class="d">凯格尔 + 呼吸 · 3 次/周</div></div></div>
+        <div class="method-glass" style="margin-bottom:8px"><div class="ico">⏱️</div><div style="flex:1"><div class="t">延时专项</div><div class="d">停-动/挤压权重提高</div></div></div>
+        <div class="method-glass"><div class="ico">🚀</div><div style="flex:1"><div class="t">综合提升</div><div class="d">五类方法均衡排布</div></div></div>
+      </div>
+    </div>
+
+    <!-- ==================== 状态 ==================== -->
+    <div class="scroll" id="page-status" style="display:none">
+      <div class="topbar"><div><h1>状态分析</h1><div class="sub">综合控制能力评估</div></div></div>
+      <div class="glass">
+        <div class="gauge-glass">
+          <!-- 弧形仪表盘 SVG -->
+          <svg width="180" height="110" viewBox="0 0 180 110" style="margin-bottom:-4px">
+            <defs>
+              <linearGradient id="gaugeGradG" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#00D4AA"/>
+                <stop offset="100%" stop-color="#00B8D4"/>
+              </linearGradient>
+            </defs>
+            <path d="M15 100 A75 75 0 0 1 165 100" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="14" stroke-linecap="round"/>
+            <path d="M15 100 A75 75 0 0 1 132 38" fill="none" stroke="url(#gaugeGradG)" stroke-width="14" stroke-linecap="round"/>
+            <text x="90" y="84" text-anchor="middle" font-size="34" font-weight="800" fill="#fff" style="text-shadow:0 0 30px rgba(0,212,170,.15)">68</text>
+            <text x="90" y="102" text-anchor="middle" font-size="10.5" fill="rgba(255,255,255,.45)">综合评分 / 100</text>
+          </svg>
+          <span class="level-glass">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="3"/></svg>
+            中级
+          </span>
+        </div>
+      </div>
+      <div class="glass">
+        <div class="h2-glass">🕸️ 五维能力雷达</div>
+        <svg width="100%" viewBox="0 0 240 220" style="max-width:280px;display:block;margin:0 auto">
+          <polygon points="120,20 210,75 178,180 62,180 30,75" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+          <polygon points="120,55 175,88 153,158 87,158 65,88" fill="none" stroke="rgba(255,255,255,.04)" stroke-width="1"/>
+          <polygon points="120,90 140,101 128,136 112,136 100,101" fill="none" stroke="rgba(255,255,255,.03)" stroke-width="1"/>
+          <polygon points="120,36 198,77 168,170 70,170 44,78" fill="rgba(0,212,170,.12)" stroke="rgba(0,212,170,.5)" stroke-width="2"/>
+          <g font-size="11" fill="rgba(255,255,255,.6)" font-weight="500">
+            <text x="120" y="14" text-anchor="middle">持久力 80</text>
+            <text x="216" y="72" text-anchor="start">控制力 70</text>
+            <text x="184" y="198" text-anchor="middle">恢复力 85</text>
+            <text x="56" y="198" text-anchor="middle">肌肉 75</text>
+            <text x="24" y="72" text-anchor="end">呼吸 62</text>
+          </g>
+        </svg>
+        <div class="legend-glass"><span><i style="background:rgba(0,212,170,.6)"></i>当前水平（0–100）</span></div>
+      </div>
+      <div class="glass">
+        <div class="h2-glass">📈 评分趋势（按周）</div>
+        <svg width="100%" viewBox="0 0 300 120" style="display:block">
+          <line x1="20" y1="100" x2="285" y2="100" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+          <line x1="20" y1="60" x2="285" y2="60" stroke="rgba(255,255,255,.03)" stroke-width="1"/>
+          <line x1="20" y1="20" x2="285" y2="20" stroke="rgba(255,255,255,.03)" stroke-width="1"/>
+          <!-- 渐变填充区域 -->
+          <defs>
+            <linearGradient id="trendFillG" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="rgba(0,212,170,.25)"/>
+              <stop offset="100%" stop-color="rgba(0,212,170,0)"/>
+            </linearGradient>
+          </defs>
+          <polygon points="40,80 90,68 140,74 190,52 240,40 285,30 285,100 40,100" fill="url(#trendFillG)"/>
+          <polyline points="40,80 90,68 140,74 190,52 240,40 285,30" fill="none" stroke="rgba(0,212,170,.8)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <g fill="rgba(0,212,170,.9)"><circle cx="40" cy="80" r="3.5"/><circle cx="90" cy="68" r="3.5"/><circle cx="140" cy="74" r="3.5"/><circle cx="190" cy="52" r="3.5"/><circle cx="240" cy="40" r="3.5"/><circle cx="285" cy="30" r="3.5"/></g>
+          <g font-size="9.5" fill="rgba(255,255,255,.35)" text-anchor="middle"><text x="40" y="115">W1</text><text x="140" y="115">W3</text><text x="240" y="115">W5</text><text x="285" y="115">now</text></g>
+        </svg>
+      </div>
+      <div class="glass">
+        <div class="h2-glass">🎯 改善建议</div>
+        <div class="tip-glass" style="margin-top:0">当前<b>呼吸配合</b>为最薄弱维度（62）。建议每周至少 3 次开启呼吸引导训练，并配合停-动技术中的节奏调整，预计 2 周可提升至 75+。</div>
+      </div>
+    </div>
+
+    <!-- ==================== 我的 ==================== -->
+    <div class="scroll" id="page-me" style="display:none">
+      <div class="topbar"><div><h1>我的</h1><div class="sub">隐私 · 数据 · 设置</div></div><div class="avatar-glass">控</div></div>
+      <div class="glass">
+        <div class="h2-glass">🔒 隐私与安全</div>
+        <div class="li-glass"><div class="ico">👤</div><div style="flex:1"><div class="t">生物识别解锁</div><div class="d">Face ID / Touch ID</div></div><div class="toggle-glass on" onclick="this.classList.toggle('on')"></div></div>
+        <div class="li-glass"><div class="ico">🔐</div><div style="flex:1"><div class="t">本地加密存储</div><div class="d">AES-256-GCM</div></div><span class="badge teal">已开启</span></div>
+        <div class="li-glass"><div class="ico">🫥</div><div style="flex:1"><div class="t">后台模糊遮罩</div><div class="d">切后台自动模糊</div></div><div class="toggle-glass on" onclick="this.classList.toggle('on')"></div></div>
+      </div>
+      <div class="glass">
+        <div class="h2-glass">💾 数据管理</div>
+        <div class="li-glass"><div class="ico">📤</div><div style="flex:1"><div class="t">加密导出</div><div class="d">导出文件需生物识别确认</div></div><span class="arrow">›</span></div>
+        <div class="li-glass"><div class="ico">📥</div><div style="flex:1"><div class="t">导入恢复</div><div class="d">导入前校验完整性</div></div><span class="arrow">›</span></div>
+        <div class="li-glass"><div class="ico">🗑️</div><div style="flex:1"><div class="t">彻底删除全部数据</div><div class="d" style="color:var(--red)">此操作不可恢复</div></div><span class="arrow">›</span></div>
+      </div>
+      <div class="glass">
+        <div class="h2-glass">⚙️ 设置</div>
+        <div class="li-glass"><div class="ico">🔔</div><div style="flex:1"><div class="t">训练提醒</div></div><div class="toggle-glass on" onclick="this.classList.toggle('on')"></div></div>
+        <div class="li-glass"><div class="ico">🔤</div><div style="flex:1"><div class="t">字号偏好</div><div class="d">标准 / 大 / 超大</div></div><span style="color:var(--text-3);font-size:13px">大 ›</span></div>
+        <div class="li-glass"><div class="ico">🌬️</div><div style="flex:1"><div class="t">呼吸引导默认</div></div><div class="toggle-glass on" onclick="this.classList.toggle('on')"></div></div>
+      </div>
+      <div class="glass">
+        <div class="li-glass"><div class="ico">📜</div><div style="flex:1"><div class="t">免责声明</div><div class="d">不替代专业医疗诊断</div></div><span class="arrow">›</span></div>
+        <div class="li-glass"><div class="ico">🛡️</div><div style="flex:1"><div class="t">隐私政策</div><div class="d" style="border-bottom:none">本地数据不上传</div></div><span class="arrow">›</span></div>
+      </div>
+      <div class="note-glass" style="padding:0 4px 8px">ControlTraining v2.0 · iOS 27 Liquid Glass · 纯本地离线运行</div>
+    </div>
+
+    <!-- ==================== 底部 Tab ==================== -->
+    <div class="tabbar">
+      <button class="tab active" data-page="home" onclick="switchTabG('home',this)">
+        <span class="tab-indicator"></span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11l9-8 9 8M5 10v10h14V10"/></svg>首页</button>
+      <button class="tab" data-page="train" onclick="switchTabG('train',this)">
+        <span class="tab-indicator"></span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>训练</button>
+      <button class="tab" data-page="plan" onclick="switchTabG('plan',this)">
+        <span class="tab-indicator"></span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 9h16M8 3v4M16 3v4"/></svg>计划</button>
+      <button class="tab" data-page="status" onclick="switchTabG('status',this)">
+        <span class="tab-indicator"></span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19V5M4 19h16M8 16l3-4 3 3 4-6"/></svg>状态</button>
+      <button class="tab" data-page="me" onclick="switchTabG('me',this)">
+        <span class="tab-indicator"></span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>我的</button>
+    </div>
+
+    <!-- ==================== 陪练覆盖层 ==================== -->
+    <div class="overlay-glass" id="ov-companion-g">
+      <div class="ov-top-glass">
+        <button class="ov-back-glass" onclick="closeCompanionG()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+          退出
+        </button>
+        <span class="title">陪练模式 · 呼吸训练</span>
+        <span style="width:50px"></span>
+      </div>
+      <div class="breathe-wrap-glass">
+        <span class="stage-tag-glass" id="stage-g">准备阶段</span>
+        <div class="breath-ring">
+          <div class="ring"></div>
+          <div class="ring"></div>
+          <div class="ring"></div>
+          <div class="breath-core" id="breathe-core-g">吸气</div>
+        </div>
+        <div class="timer-big-glass" id="ctimer-g">05:00</div>
+        <span class="muted-glass">语音引导同步进行中</span>
+      </div>
+      <div class="ctrl-row-glass">
+        <button class="ctrl-glass pause-glass" id="pauseBtn-g" onclick="togglePauseG()">⏸</button>
+        <button class="ctrl-glass stop-glass" onclick="closeCompanionG()">■</button>
+      </div>
+    </div>
+
+    <!-- ==================== 方法详情覆盖层 ==================== -->
+    <div class="overlay-glass" id="ov-method-g">
+      <div class="ov-top-glass">
+        <button class="ov-back-glass" onclick="document.getElementById('ov-method-g').classList.remove('show')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+          返回
+        </button>
+        <span class="title" id="m-title-g">方法详情</span>
+        <span style="width:50px"></span>
+      </div>
+      <div class="scroll no-tab" style="padding-top:4px">
+        <div class="glass tinted" style="padding:18px 18px 20px">
+          <div class="label-glass" style="color:var(--accent-1)" id="m-diff-g">初级</div>
+          <div style="font-size:22px;font-weight:700;margin-top:6px;color:#fff" id="m-name-g">凯格尔运动</div>
+        </div>
+        <div class="glass"><div class="h2-glass">📖 训练原理</div><div class="muted-glass" id="m-principle-g" style="line-height:1.8"></div></div>
+        <div class="glass"><div class="h2-glass">📝 操作步骤</div><div class="muted-glass" id="m-steps-g" style="line-height:1.9"></div></div>
+        <div class="glass"><div class="h2-glass">⚠️ 禁忌人群</div><div class="tip-glass" id="m-contra-g" style="margin-top:0"></div></div>
+        <div class="glass"><div class="h2-glass">📚 来源标注</div><div class="muted-glass" style="font-size:12px">基于公开医学文献（Kegel 1948；国际尿控协会盆底训练指南）。仅供参考，不替代专业医疗诊断。</div></div>
+        <button class="btn-glass primary" style="margin:6px 0 18px" onclick="document.getElementById('ov-method-g').classList.remove('show');openCompanionG()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="8,5 19,12 8,19"/></svg>
+          用此方法开始陪练
+        </button>
+      </div>
+    </div>
+
+    <div class="toast-glass" id="toast-g"></div>
+  </div>
+</div>
+
+<script>
+  // ===== 热力图 =====
+  (function(){
+    const h=document.getElementById('heat-g');
+    const lv=[0,1,0,2,3,1,0, 2,3,4,2,1,0,3, 1,0,3,4,3,2,1, 0,2,3,4,4,3,2];
+    lv.forEach((v,i)=>{const d=document.createElement('div');d.className='d'+(v?' l'+v:'');if(i===27)d.classList.add('today');h.appendChild(d);});
+  })();
+
+  // ===== 训练方法数据 =====
+  const dataG={
+    kegel:{name:'凯格尔运动',diff:'初级',principle:'通过反复收缩盆底肌（PC 肌）增强其力量与耐力，从而提升射精控制能力。该肌群在排尿中途可主动收缩以暂停尿流，是控制射精的核心肌肉。',steps:'① 找到 PC 肌：排尿中途尝试暂停，感受收缩的肌肉。\n② 收缩保持 3–5 秒，放松同样时长。\n③ 每组 10–15 次，每日 3 组。\n④ 可随时随地进行，无需特定姿势。',contra:'急性前列腺炎、泌尿系统感染期、术后恢复期应暂停；严重心血管病史者请先咨询医生。'},
+    startstop:{name:'停-动技术',diff:'中级',principle:'在刺激临近射精临界点时主动停止，待兴奋度下降后继续，通过反复节律训练延长耐受时间，提升自主控制能力。',steps:'① 进入训练，接近临界点时停止一切刺激。\n② 等待兴奋度明显消退（约 10–30 秒）。\n③ 再次开始，重复 3–5 个循环。\n④ 最后一次允许完成，记录时长。',contra:'存在明显疼痛或不适者停止；不宜在疲劳或饮酒后训练。'},
+    squeeze:{name:'挤压技术',diff:'中级',principle:'在射精临界点时轻捏冠状沟处，抑制射精反射，适用于停-动技术效果不佳时作为补充手段。',steps:'① 接近临界点时，用拇指与食指轻捏冠状沟。\n② 保持压力至兴奋度下降。\n③ 松开后休息数秒再继续。\n④ 配合停-动技术交替使用。',contra:'力度需轻柔，避免造成损伤；包皮异常者慎用。'},
+    breath:{name:'呼吸训练',diff:'初级',principle:'配合深慢呼吸降低交感神经兴奋，延缓射精反射。呼吸引导可与任意训练同步进行，是控制力提升的基础。',steps:'① 鼻吸 4 秒，感受腹部隆起。\n② 屏息 2 秒。\n③ 口呼 6 秒，缓慢放松。\n④ 与训练节奏同步，保持平稳。',contra:'一般人群均可，呼吸疾病者调整节奏即可。'},
+    pelvic:{name:'骨盆底肌训练',diff:'高级',principle:'系统性地对盆底肌群进行收缩/放松与耐力训练，综合提升肌肉力量与控制精度，是高级阶段的核心内容。',steps:'① 快速收缩-放松（脉冲式）10 次。\n② 慢速持久收缩 10 秒 × 5 组。\n③ 结合桥式等体位增强整体核心。\n④ 每周循序渐进增加强度。',contra:'需在初级/中级打好基础后进行；有盆底疼痛者先就医。'}
+  };
+
+  // ===== Tab 切换 =====
+  function switchTabG(page,el){
+    document.querySelectorAll('.scroll').forEach(s=>s.style.display='none');
+    document.getElementById('page-'+page).style.display='block';
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // ===== 方法详情 =====
+  function openMethodG(k){
+    const d=dataG[k];
+    document.getElementById('m-title-g').textContent=d.name;
+    document.getElementById('m-name-g').textContent=d.name;
+    document.getElementById('m-diff-g').textContent=d.diff;
+    document.getElementById('m-principle-g').textContent=d.principle;
+    document.getElementById('m-steps-g').textContent=d.steps;
+    document.getElementById('m-contra-g').textContent=d.contra;
+    document.getElementById('ov-method-g').classList.add('show');
+  }
+
+  // ===== 陪练模式 =====
+  let timerIdG=null, remainG=300, pausedG=false, phaseIdxG=0;
+  const phasesG=['吸气','保持','呼气','放松'];
+  function fmtG(s){const m=String(Math.floor(s/60)).padStart(2,'0');const ss=String(s%60).padStart(2,'0');return m+':'+ss;}
+  function openCompanionG(){
+    document.getElementById('ov-companion-g').classList.add('show');
+    remainG=300;pausedG=false;phaseIdxG=0;
+    document.getElementById('stage-g').textContent='准备阶段';
+    document.getElementById('ctimer-g').textContent='05:00';
+    document.getElementById('breathe-core-g').textContent='准备';
+    document.getElementById('pauseBtn-g').textContent='⏸';
+    if(timerIdG)clearInterval(timerIdG);
+    timerIdG=setInterval(()=>{
+      if(pausedG)return;
+      if(remainG<=0){clearInterval(timerIdG);toastG('训练完成，已记录复盘');return;}
+      remainG--;document.getElementById('ctimer-g').textContent=fmtG(remainG);
+      phaseIdxG=(phaseIdxG+1)%4;
+      document.getElementById('breathe-core-g').textContent=phasesG[phaseIdxG];
+      document.getElementById('stage-g').textContent='训练中 · 第 '+(Math.floor((300-remainG)/15)+1)+' 组';
+    },1000);
+  }
+  function togglePauseG(){
+    pausedG=!pausedG;document.getElementById('pauseBtn-g').textContent=pausedG?'▶':'⏸';
+    document.getElementById('stage-g').textContent=pausedG?'已暂停':'训练中';
+  }
+  function closeCompanionG(){document.getElementById('ov-companion-g').classList.remove('show');if(timerIdG)clearInterval(timerIdG);}
+  function toastG(msg){const t=document.getElementById('toast-g');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800);}
+
+  // 演示：点击第二项任务
+  document.addEventListener('DOMContentLoaded',function(){
+    const t2=document.getElementById('task2-wrap');
+    if(t2)t2.addEventListener('click',function(){
+      const chk=document.getElementById('task2-chk-g');
+      const txt=document.getElementById('task2-txt-g');
+      chk.classList.add('done');chk.textContent='✓';
+      txt.classList.add('done');txt.textContent='呼吸训练（已完成）';
+      toastG('打卡成功 · 连续 13 天 🎉');
+    });
+  });
+</script>
+</body>
+</html>

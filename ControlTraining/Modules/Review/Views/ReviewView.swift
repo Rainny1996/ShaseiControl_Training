@@ -55,31 +55,23 @@ struct ReviewView: View {
                 GridItem(.flexible())
             ], spacing: 12) {
                 StatCard(
-                    icon: "figure.core.training",
                     title: "训练次数",
-                    value: "\(viewModel.totalTrainingCount)",
-                    color: .accentColor
+                    value: "\(viewModel.totalTrainingCount)"
                 )
                 
                 StatCard(
-                    icon: "clock.fill",
                     title: "总时长",
-                    value: viewModel.formatDuration(viewModel.totalTrainingDuration),
-                    color: .blue
+                    value: viewModel.formatDuration(viewModel.totalTrainingDuration)
                 )
                 
                 StatCard(
-                    icon: "chart.pie.fill",
                     title: "平均完成度",
-                    value: viewModel.formatCompletionRate(viewModel.averageCompletion),
-                    color: .green
+                    value: viewModel.formatCompletionRate(viewModel.averageCompletion)
                 )
                 
                 StatCard(
-                    icon: "star.fill",
                     title: "平均自评",
-                    value: String(format: "%.1f", viewModel.averageRating),
-                    color: .orange
+                    value: String(format: "%.1f", viewModel.averageRating)
                 )
             }
         }
@@ -163,18 +155,14 @@ struct ReviewView: View {
                         y: .value("评分", item.averageRating)
                     )
                     .foregroundStyle(Color.accentColor)
-                    .symbol(Circle()) {
-                        .size(24)
-                    }
+                    .symbol { Circle().frame(width: 8, height: 8) }
                     
                     LineMark(
                         x: .value("周", item.label),
                         y: .value("完成度", item.averageCompletion * 5)
                     )
                     .foregroundStyle(Color.green)
-                    .symbol(Circle()) {
-                        .size(24)
-                    }
+                    .symbol { Circle().frame(width: 8, height: 8) }
                     .lineStyle(StrokeStyle(lineWidth: 2, dash: [4, 2]))
                 }
                 .frame(height: 180)
@@ -262,37 +250,6 @@ struct ReviewView: View {
         }
         .frame(maxWidth: .infinity)
         .frame(height: 180)
-    }
-}
-
-// MARK: - 统计卡片
-
-private struct StatCard: View {
-    let icon: String
-    let title: String
-    let value: String
-    let color: Color
-    
-    var body: some View {
-        VStack(spacing: 8) {
-            Image(systemName: icon)
-                .font(.title3)
-                .foregroundColor(color)
-            
-            Text(value)
-                .font(.system(size: 18, weight: .bold))
-                .foregroundColor(.primary)
-                .lineLimit(1)
-                .minimumScaleFactor(0.7)
-            
-            Text(title)
-                .font(.caption2)
-                .foregroundColor(.secondary)
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 12)
-        .background(Color(.tertiarySystemGroupedBackground))
-        .cornerRadius(12)
     }
 }
 

@@ -251,7 +251,7 @@ struct ReviewQuestionnaireView: View {
                 if notes.isEmpty {
                     Text("记录今天的训练感受、进步或需要改进的地方...")
                         .font(.subheadline)
-                        .foregroundColor(.placeholder)
+                        .foregroundStyle(.secondary)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 10)
                 }

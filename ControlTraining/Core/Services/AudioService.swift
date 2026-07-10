@@ -118,14 +118,12 @@ class AudioService {
     // MARK: - Session Management
     
     /// 配置音频会话为后台播放模式
+    /// 注意：音频会话已在AppDelegate中统一配置，此方法仅用于需要重新激活的场景
     func configureBackgroundPlayback() {
         do {
-            try AVAudioSession.sharedInstance().setCategory(.playback,
-                                                             mode: .spokenAudio,
-                                                             options: [.duckOthers])
             try AVAudioSession.sharedInstance().setActive(true)
         } catch {
-            print("Failed to configure background playback: \(error)")
+            print("Failed to activate audio session: \(error)")
         }
     }
     

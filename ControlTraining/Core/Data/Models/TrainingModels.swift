@@ -162,7 +162,7 @@ struct TrainingRecord: Identifiable {
         self.date = date
         self.duration = duration
         self.completionRate = completionRate
-        self.selfRating = selfRating
+        self.selfRating = max(1, min(5, selfRating))
         self.notes = notes
         self.mode = mode
     }

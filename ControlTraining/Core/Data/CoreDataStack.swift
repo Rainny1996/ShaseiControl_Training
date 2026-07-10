@@ -16,8 +16,6 @@ class DataController: ObservableObject {
         
         // 配置数据保护级别
         if let description = container.persistentStoreDescriptions.first {
-            description.setOption(true as NSNumber,
-                                  forKey: NSPersistentStoreFileProtectionKey)
             description.setOption(FileProtectionType.complete as NSNumber,
                                   forKey: NSPersistentStoreFileProtectionKey)
         }
@@ -82,6 +80,11 @@ class DataController: ObservableObject {
                     print("Failed to delete \(entityName): \(error)")
                 }
             }
+        }
+        
+        // 批量删除直接操作SQLite，绕过viewContext，必须刷新缓存
+        DispatchQueue.main.async { [weak self] in
+            self?.container.viewContext.reset()
         }
     }
 }

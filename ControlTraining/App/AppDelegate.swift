@@ -36,7 +36,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback,
                                                              mode: .spokenAudio,
-                                                             options: [.duckOthers, .allowBluetooth])
+                                                             options: [.duckOthers, .allowBluetooth, .mixWithOthers])
             try AVAudioSession.sharedInstance().setActive(true)
         } catch {
             print("Failed to configure audio session: \(error)")

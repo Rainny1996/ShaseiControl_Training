@@ -12,7 +12,6 @@ struct ControlTrainingApp: App {
                 .environment(\.managedObjectContext, dataController.container.viewContext)
                 .environmentObject(appState)
                 .onAppear {
-                    SecurityService.shared.configureProtection()
                     initializeDataIfNeeded()
                 }
         }
@@ -42,8 +41,14 @@ class AppState: ObservableObject {
     @Published var isOnboardingCompleted: Bool = false
     @Published var isInitialSetupCompleted: Bool = false
     
+    /// 配置应用保护（仅在初始化时调用一次）
+    private func setupSecurityProtection() {
+        SecurityService.shared.configureProtection()
+    }
+    
     init() {
         loadState()
+        setupSecurityProtection()
         setupNotificationObservers()
     }
     

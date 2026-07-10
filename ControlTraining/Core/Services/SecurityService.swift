@@ -231,15 +231,7 @@ class SecurityService {
     
     /// 配置应用保护
     func configureProtection() {
-        // 监听应用状态变化
-        NotificationCenter.default.addObserver(
-            forName: UIApplication.didEnterBackgroundNotification,
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            self?.lockApp()
-        }
-        
+        // 仅监听前台返回事件（后台锁定由AppDelegate处理，避免双重触发）
         NotificationCenter.default.addObserver(
             forName: UIApplication.willEnterForegroundNotification,
             object: nil,
@@ -283,22 +275,18 @@ class SecurityService {
     
     // MARK: - Data Encryption
     
-    /// 加密敏感数据
+    /// 加密敏感数据（委托给CryptoService，统一加密入口）
     /// - Parameter data: 原始数据
     /// - Returns: 加密后的数据
     func encryptData(_ data: Data) -> Data? {
-        let key = getOrCreateEncryptionKey()
-        let sealedBox = try? AES.GCM.seal(data, using: key)
-        return sealedBox?.combined
+        return CryptoService.shared.encryptData(data)
     }
     
-    /// 解密敏感数据
+    /// 解密敏感数据（委托给CryptoService，统一加密入口）
     /// - Parameter encryptedData: 加密数据
     /// - Returns: 解密后的数据
     func decryptData(_ encryptedData: Data) -> Data? {
-        let key = getOrCreateEncryptionKey()
-        guard let sealedBox = try? AES.GCM.SealedBox(combined: encryptedData) else { return nil }
-        return try? AES.GCM.open(sealedBox, using: key)
+        return CryptoService.shared.decryptData(encryptedData)
     }
     
     /// 安全删除数据
@@ -328,70 +316,6 @@ class SecurityService {
         
         let hashed = SHA256.hash(data: combinedData)
         return Data(hashed)
-    }
-    
-    /// 获取或创建加密密钥
-    private func getOrCreateEncryptionKey() -> SymmetricKey {
-        let keyKey = "encryptionKey"
-        
-        if let keyData = loadFromKeychain(key: keyKey) {
-            return SymmetricKey(data: keyData)
-        }
-        
-        // 创建新密钥
-        let key = SymmetricKey(size: .bits256)
-        let keyData = key.withUnsafeBytes { Data($0) }
-        _ = saveToKeychain(key: keyKey, data: keyData)
-        
-        return key
-    }
-    
-    // MARK: - Keychain Operations
-    
-    /// 保存数据到Keychain
-    @discardableResult
-    private func saveToKeychain(key: String, data: Data) -> Bool {
-        let query: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: keychainService,
-            kSecAttrAccount as String: key,
-            kSecValueData as String: data,
-            kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlockedThisDeviceOnly
-        ]
-        
-        // 先删除旧数据
-        SecItemDelete(query as CFDictionary)
-        
-        let status = SecItemAdd(query as CFDictionary, nil)
-        return status == errSecSuccess
-    }
-    
-    /// 从Keychain加载数据
-    private func loadFromKeychain(key: String) -> Data? {
-        let query: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: keychainService,
-            kSecAttrAccount as String: key,
-            kSecReturnData as String: true,
-            kSecMatchLimit as String: kSecMatchLimitOne
-        ]
-        
-        var result: AnyObject?
-        let status = SecItemCopyMatching(query as CFDictionary, &result)
-        
-        guard status == errSecSuccess else { return nil }
-        return result as? Data
-    }
-    
-    /// 从Keychain删除数据
-    private func removeFromKeychain(key: String) {
-        let query: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: keychainService,
-            kSecAttrAccount as String: key
-        ]
-        
-        SecItemDelete(query as CFDictionary)
     }
 }
 

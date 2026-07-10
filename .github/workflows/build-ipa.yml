@@ -44,6 +44,75 @@ jobs:
         run: |
           xcodebuild -list -project ControlTraining.xcodeproj
 
+      - name: Diagnose CoreData Model
+        run: |
+          echo "=== XcodeGen Version ==="
+          xcodegen --version
+          echo ""
+          echo "=== Check xcdatamodeld directory structure ==="
+          find ControlTraining -name "*.xcdatamodeld" -type d 2>/dev/null || echo "No xcdatamodeld found"
+          find ControlTraining -name "*.xcdatamodel" -type d 2>/dev/null || echo "No xcdatamodel found"
+          echo ""
+          echo "=== List xcdatamodeld contents ==="
+          XCDATAMODELD=$(find ControlTraining -name "*.xcdatamodeld" -type d | head -1)
+          if [ -n "$XCDATAMODELD" ]; then
+            echo "xcdatamodeld path: $XCDATAMODELD"
+            ls -la "$XCDATAMODELD/"
+            echo ""
+            XCDATAMODEL=$(find "$XCDATAMODELD" -name "*.xcdatamodel" -type d | head -1)
+            if [ -n "$XCDATAMODEL" ]; then
+              echo "xcdatamodel path: $XCDATAMODEL"
+              ls -la "$XCDATAMODEL/"
+            fi
+          fi
+          echo ""
+          echo "=== Check XCVersionGroup in project.pbxproj ==="
+          grep -A5 -B2 "XCVersionGroup" ControlTraining.xcodeproj/project.pbxproj || echo "No XCVersionGroup found in project"
+          echo ""
+          echo "=== Check xcdatamodeld references in project.pbxproj ==="
+          grep -i "xcdatamodel" ControlTraining.xcodeproj/project.pbxproj || echo "No xcdatamodel reference in project"
+          echo ""
+          echo "=== Check PBXFileReference for xcdatamodel ==="
+          grep "wrapper.xcdatamodel" ControlTraining.xcodeproj/project.pbxproj || echo "No wrapper.xcdatamodel found"
+          echo ""
+          echo "=== Check CoreData model file encoding ==="
+          MODEL_FILE=$(find ControlTraining -path "*/xcdatamodel/contents" | head -1)
+          if [ -n "$MODEL_FILE" ]; then
+            echo "Model file: $MODEL_FILE"
+            file "$MODEL_FILE" || true
+            echo "First 20 bytes (hex):"
+            xxd -l 20 "$MODEL_FILE" || od -A x -t x1z -N 20 "$MODEL_FILE" || true
+            echo "First 3 lines:"
+            head -3 "$MODEL_FILE"
+          fi
+          echo ""
+          echo "=== Check .xccurrentversion ==="
+          VER_FILE=$(find ControlTraining -name ".xccurrentversion" | head -1)
+          if [ -n "$VER_FILE" ]; then
+            echo "Version file: $VER_FILE"
+            file "$VER_FILE" || true
+            echo "First 20 bytes (hex):"
+            xxd -l 20 "$VER_FILE" || od -A x -t x1z -N 20 "$VER_FILE" || true
+            cat "$VER_FILE"
+          fi
+          echo ""
+          echo "=== Check build phase for xcdatamodeld ==="
+          PBXPROJ=ControlTraining.xcodeproj/project.pbxproj
+          # Find the XCVersionGroup object ID
+          XCID=$(grep -B1 "XCVersionGroup" "$PBXPROJ" | head -1 | awk -F'/' '{print $2}' | tr -d ' ')
+          if [ -n "$XCID" ]; then
+            echo "XCVersionGroup ID: $XCID"
+            # Check if it's in PBXBuildFile
+            grep "$XCID" "$PBXPROJ" | head -5 || echo "XCVersionGroup ID not found in build files"
+          fi
+
+      - name: Clean Build
+        run: |
+          echo "=== Cleaning previous build artifacts ==="
+          rm -rf build
+          rm -rf ~/Library/Developer/Xcode/DerivedData/ControlTraining*
+          echo "Clean complete"
+
       - name: Build App
         run: |
           xcodebuild build \
@@ -73,8 +142,11 @@ jobs:
           APP_PATH=$(find build -name "ControlTraining.app" | head -1)
           if [ -z "$APP_PATH" ]; then
             echo "ERROR: Could not find ControlTraining.app"
-            echo "=== Build errors ==="
-            grep -i "error:" build.log | head -30 || echo "No error lines found"
+            echo "=== Build errors (grep) ==="
+            grep -E "error:|warning:|fatal:" build.log | head -50 || echo "No error lines found"
+            echo ""
+            echo "=== Last 150 lines of build log ==="
+            tail -150 build.log
             exit 1
           fi
           echo "Found app at: $APP_PATH"

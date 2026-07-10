@@ -34,6 +34,7 @@
         <attribute name="selfRating" attributeType="Integer 16" defaultValueString="3" usesScalarValueType="YES"/>
         <attribute name="notes" optional="YES" attributeType="String"/>
         <attribute name="mode" attributeType="String" defaultValueString="基础模式"/>
+        <attribute name="isPartial" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDUser" inverseName="trainingRecords" inverseEntity="CDUser"/>
         <relationship name="reviewNotes" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDReviewNote" inverseName="trainingRecord" inverseEntity="CDReviewNote"/>
     </entity>

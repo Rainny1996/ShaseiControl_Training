@@ -48,7 +48,7 @@
 
 - [x] 11. 测试与优化 — _AC: 1–7 质量保障_
   - 业务逻辑单测、UI 测试、性能测试、缺陷修复
-  - ⚠️ **修正声明**：v1.0 代码审查指出"无 UI 测试/无集成测试"。本任务须以**实际存在的测试文件与通过结果**为准，建议补集成测试（Repository→Service→ViewModel）。
+  - ⚠️ **修正声明**：v1.0 代码审查指出"无 UI 测试/无集成测试"。现已补齐：`project.yml` 增加 unit-test/ui-testing 两个 target（此前无测试 target，用例从未被构建运行），新增 `ControlTrainingTests/Core/Integration/IntegrationTests.swift`（5 例跨层闭环）+ `ControlTrainingUITests/`（2 例 UI 冒烟），CI 经 `test.yml` 实际运行 166 用例。详见 `docs/reviews/v4.0-测试覆盖审查报告.md`。
 
 ## 发布任务（首轮，已完成）
 

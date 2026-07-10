@@ -229,16 +229,10 @@ class SecurityService {
     
     // MARK: - App Protection
     
-    /// 配置应用保护
+    /// 配置应用保护（仅注册前台返回一次性观察者，避免与 AppDelegate 双重触发）
     func configureProtection() {
-        // 仅监听前台返回事件（后台锁定由AppDelegate处理，避免双重触发）
-        NotificationCenter.default.addObserver(
-            forName: UIApplication.willEnterForegroundNotification,
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            self?.unlockAppIfNeeded()
-        }
+        // BUG-CT-07 修复 + ARC-07 删除冗余前台监听
+        // 应用锁定/解锁统一由 AppDelegate.applicationWillEnterForeground 处理
     }
     
     /// 锁定应用
@@ -289,12 +283,11 @@ class SecurityService {
         return CryptoService.shared.decryptData(encryptedData)
     }
     
-    /// 安全删除数据
-    /// - Parameter data: 要删除的数据
+    /// 安全重置标记位（SEC-02: 移除无效 memset，Data 为 CoW 值类型无法通过 & 强制清零）
+    /// 实际安全删除由 Keychain + Core Data batch delete 保证
     func secureDelete(_ data: Data) {
-        var mutableData = data
-        let count = mutableData.count
-        memset(&mutableData, 0, count)
+        // Swift Data 为写时复制值类型，memset 无法清零底层缓冲区
+        // 数据安全依赖：Keychain 凭证清理 + Core Data NSBatchDeleteRequest
     }
     
     // MARK: - Private Helpers
@@ -308,14 +301,23 @@ class SecurityService {
         return salt
     }
     
-    /// 使用SHA256哈希密码
+    /// SEC-01 修复：使用 PBKDF2-SHA256（100,000 次迭代）替代单次 SHA256
     private func hashPassword(_ password: String, salt: Data) -> Data? {
         guard let passwordData = password.data(using: .utf8) else { return nil }
-        var combinedData = salt
-        combinedData.append(passwordData)
-        
-        let hashed = SHA256.hash(data: combinedData)
-        return Data(hashed)
+        var derivedKey = Data(count: 32)
+        let result = derivedKey.withUnsafeMutableBytes { keyBytes in
+            salt.withUnsafeBytes { saltBytes in
+                CCKeyDerivationPBKDF(
+                    CCPBKDFAlgorithm(kCCPBKDF2),
+                    password, passwordData.count,
+                    saltBytes.baseAddress, salt.count,
+                    CCPseudoRandomAlgorithm(kCCPRFHmacAlgSHA256),
+                    100_000,
+                    keyBytes.baseAddress, 32)
+            }
+        }
+        guard result == kCCSuccess else { return nil }
+        return derivedKey
     }
 }
 

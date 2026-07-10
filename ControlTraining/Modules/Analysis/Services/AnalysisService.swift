@@ -118,9 +118,9 @@ class AnalysisService {
     private func calculateBreathCoordination(records: [TrainingRecord], reviewStats: ReviewStatistics) -> Double {
         guard !records.isEmpty else { return 0 }
         
-        // 呼吸训练专项完成度
-        let breathRecords = records.filter { $0.methodId != UUID() } // 所有记录都考虑
-        let breathCompletion = breathRecords.isEmpty ? 0 : breathRecords.map { $0.completionRate }.reduce(0, +) / Double(breathRecords.count)
+        // ARC-04 修复：移除无效 UUID() 过滤（每次随机生成永不等同于真实 ID）
+        // 呼吸配合维度基于全体训练记录的完成率与感受评分加权的通用统计
+        let breathCompletion = records.map { $0.completionRate }.reduce(0, +) / Double(records.count)
         
         // 感受评分（呼吸训练与感受强相关）
         let feelingFactor = reviewStats.averageFeelingScore / 5.0

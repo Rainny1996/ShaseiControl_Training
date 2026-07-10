@@ -27,5 +27,44 @@ targets:
         INFOPLIST_FILE: ControlTraining/App/Info.plist
         IPHONEOS_DEPLOYMENT_TARGET: "17.0"
         ENABLE_BITCODE: NO
+        ENABLE_TESTABILITY: "YES"
         MARKETING_VERSION: "1.0.0"
         CURRENT_PROJECT_VERSION: "1"
+
+  ControlTrainingTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: ControlTrainingTests
+    dependencies:
+      - target: ControlTraining
+    settings:
+      base:
+        SWIFT_VERSION: "5.9"
+        TEST_HOST: $(BUILT_PRODUCTS_DIR)/ControlTraining.app/ControlTraining
+        BUNDLE_LOADER: $(TEST_HOST)
+        CODE_SIGNING_ALLOWED: "NO"
+
+  ControlTrainingUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: ControlTrainingUITests
+    dependencies:
+      - target: ControlTraining
+    settings:
+      base:
+        SWIFT_VERSION: "5.9"
+        CODE_SIGNING_ALLOWED: "NO"
+
+schemes:
+  ControlTraining:
+    build:
+      targets:
+        ControlTraining: all
+        ControlTrainingTests: test
+        ControlTrainingUITests: test
+    test:
+      targets:
+        - ControlTrainingTests
+        - ControlTrainingUITests

@@ -8,7 +8,7 @@ public class CDTrainingRecord: NSManagedObject {
 }
 
 extension CDTrainingRecord {
-    /// 便利初始化方法
+    /// 便利初始化方法（AC-2.10: 含 isPartial 部分记录标记）
     convenience init(context: NSManagedObjectContext, from record: TrainingRecord) {
         self.init(context: context)
         self.id = record.id
@@ -19,6 +19,7 @@ extension CDTrainingRecord {
         self.selfRating = Int16(record.selfRating)
         self.notes = record.notes
         self.mode = record.mode.rawValue
+        self.isPartial = record.isPartial
     }
     
     /// 转换为领域模型
@@ -31,7 +32,8 @@ extension CDTrainingRecord {
             completionRate: completionRate,
             selfRating: Int(selfRating),
             notes: notes ?? "",
-            mode: TrainingMode(rawValue: mode!) ?? .basic
+            mode: TrainingMode(rawValue: mode!) ?? .basic,
+            isPartial: isPartial
         )
     }
 }

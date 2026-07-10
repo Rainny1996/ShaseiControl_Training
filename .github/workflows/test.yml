@@ -1,0 +1,46 @@
+name: Test
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check Environment
+        run: |
+          echo "=== Xcode Version ==="
+          xcodebuild -version
+          echo ""
+          echo "=== XcodeGen ==="
+          brew install xcodegen
+          xcodegen --version
+
+      - name: Generate Xcode Project
+        run: xcodegen generate
+
+      - name: Run Tests
+        run: |
+          set -o pipefail
+          xcodebuild test \
+            -project ControlTraining.xcodeproj \
+            -scheme ControlTraining \
+            -configuration Debug \
+            -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            2>&1 | tee test.log
+
+      - name: Upload test log on failure
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: test-log
+          path: test.log
+          retention-days: 7

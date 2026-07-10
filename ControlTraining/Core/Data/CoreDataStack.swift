@@ -25,6 +25,11 @@ class DataController: ObservableObject {
                 fatalError("Core Data failed to load: \(error.localizedDescription)")
             }
         }
+
+        // AC-7.5: 排除 iCloud 备份
+        if let url = container.persistentStoreDescriptions.first?.url {
+            excludeFromiCloudBackup(directoryAt: url)
+        }
         
         container.viewContext.automaticallyMergesChangesFromParent = true
         container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
@@ -66,25 +71,41 @@ class DataController: ObservableObject {
     // MARK: - Data Management
     
     /// 删除所有用户数据（用于隐私保护功能）
+    /// ARC-03 修复: 在后台任务完成后再 reset，消除竞态
     func deleteAllUserData() {
         let entities = ["CDTrainingRecord", "CDCheckInRecord", "CDTrainingPlan", "CDAbilityProfile", "CDReviewNote"]
         
-        performBackgroundTask { context in
+        container.performBackgroundTask { [weak self] context in
             for entityName in entities {
                 let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
                 let deleteRequest = NSBatchDeleteRequest(fetchRequest: request)
-                
                 do {
                     try context.execute(deleteRequest)
                 } catch {
                     print("Failed to delete \(entityName): \(error)")
                 }
             }
-        }
-        
-        // 批量删除直接操作SQLite，绕过viewContext，必须刷新缓存
-        DispatchQueue.main.async { [weak self] in
-            self?.container.viewContext.reset()
+            if context.hasChanges {
+                try? context.save()
+            }
+            // 批量删除直接操作SQLite绕过viewContext，必须在后台保存完成后刷新
+            DispatchQueue.main.async {
+                self?.container.viewContext.reset()
+            }
+    }
+
+    // MARK: - iCloud Exclusion (AC-7.5)
+
+    /// 为 Core Data 存储目录设置 skipBackup 属性，排除 iCloud 备份
+    private func excludeFromiCloudBackup(directoryAt storeURL: URL) {
+        var url = storeURL
+        url.deleteLastPathComponent()
+        do {
+            var resourceValues = URLResourceValues()
+            resourceValues.isExcludedFromBackup = true
+            try url.setResourceValues(resourceValues)
+        } catch {
+            print("⚠️ Failed to set iCloud backup exclusion: \(error.localizedDescription)")
         }
     }
 }

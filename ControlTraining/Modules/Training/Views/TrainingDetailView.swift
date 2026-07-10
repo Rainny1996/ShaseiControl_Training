@@ -319,8 +319,90 @@ struct TrainingDetailView: View {
                     .stroke(Color.green.opacity(0.2), lineWidth: 1)
             )
             .padding(.horizontal)
+            .padding(.bottom, 12)
+
+            // AC-C.2 / AC-C.5: 来源标注 + 禁忌人群
+            if let source = method.source, !source.isEmpty {
+                sourceAttributionSection(source)
+            }
+            if let contraindication = method.contraindication, !contraindication.isEmpty {
+                contraindicationSection(contraindication)
+            }
+
+            // 安全提示
+            VStack(alignment: .leading, spacing: 8) {
+                HStack {
+                    Image(systemName: "shield.checkered")
+                        .foregroundColor(.green)
+                    Text("安全提示")
+                        .font(.headline)
+                }
+                
+                Text("如在训练过程中出现任何不适，请立即停止训练并咨询专业医生。本应用提供的训练方法仅供参考，不能替代专业医疗建议。")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .lineSpacing(4)
+            }
+            .padding()
+            .background(Color.green.opacity(0.05))
+            .cornerRadius(12)
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(Color.green.opacity(0.2), lineWidth: 1)
+            )
+            .padding(.horizontal)
             .padding(.bottom, 20)
         }
+    }
+
+    // MARK: - AC-C.2 来源标注
+    private func sourceAttributionSection(_ source: String) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Image(systemName: "books.vertical")
+                    .foregroundColor(.indigo)
+                Text("参考文献 / 来源")
+                    .font(.headline)
+            }
+            Text(source)
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .lineSpacing(4)
+        }
+        .padding()
+        .background(Color.indigo.opacity(0.05))
+        .cornerRadius(12)
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color.indigo.opacity(0.2), lineWidth: 1)
+        )
+        .padding(.horizontal)
+        .padding(.bottom, 12)
+    }
+
+    // MARK: - AC-C.5 禁忌人群
+    private func contraindicationSection(_ text: String) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Image(systemName: "person.2.slash")
+                    .foregroundColor(.red)
+                Text("禁忌人群 / 不适用情况")
+                    .font(.headline)
+            }
+            Text(text)
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .lineSpacing(4)
+        }
+        .padding()
+        .background(Color.red.opacity(0.05))
+        .cornerRadius(12)
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color.red.opacity(0.2), lineWidth: 1)
+        )
+        .padding(.horizontal)
+        .padding(.bottom, 12)
     }
 }
 

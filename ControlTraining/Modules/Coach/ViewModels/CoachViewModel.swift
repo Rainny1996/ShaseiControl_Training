@@ -129,11 +129,79 @@ class CoachViewModel: ObservableObject {
         
         // 生成阶段序列
         generatePhaseSequence()
+        
+        // AC-2.9: 音频中断监听
+        setupAudioInterruptionObserver()
+        
+        // AC-2.10: 后台/强制退出 — 保存部分记录
+        setupBackgroundObserver()
     }
     
     deinit {
+        NotificationCenter.default.removeObserver(self)
         stopTimer()
         audioService.stopAll()
+    }
+    
+    /// AC-2.9: 来电/抢占音频中断 → 计时暂停 + 提示手动恢复
+    private func setupAudioInterruptionObserver() {
+        NotificationCenter.default.addObserver(
+            forName: AVAudioSession.interruptionNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            guard let self = self,
+                  let typeValue = notification.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt,
+                  let type = AVAudioSession.InterruptionType(rawValue: typeValue) else { return }
+            
+            switch type {
+            case .began:
+                // 音频被抢占 → 暂停训练
+                if self.sessionPhase == .training {
+                    self.pauseTraining()
+                }
+            case .ended:
+                // 音频恢复 → 提示用户手动恢复
+                if let optionsValue = notification.userInfo?[AVAudioSessionInterruptionOptionKey] as? UInt {
+                    let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
+                    if options.contains(.shouldResume) {
+                        // 音频已恢复，但训练保持暂停，由用户手动恢复
+                        break
+                    }
+                }
+            @unknown default: break
+            }
+        }
+    }
+    
+    /// AC-2.10: 强制退出 → 生成部分训练记录
+    private func setupBackgroundObserver() {
+        NotificationCenter.default.addObserver(
+            forName: UIApplication.willResignActiveNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            guard let self = self,
+                  self.sessionPhase == .training || self.sessionPhase == .paused
+            else { return }
+            
+            // 保存部分训练记录（isPartial=true, completed=false）
+            self.savePartialRecordOnBackground()
+        }
+    }
+    
+    /// 保存部分训练记录
+    private func savePartialRecordOnBackground() {
+        let record = TrainingRecord(
+            methodId: method.id,
+            duration: TimeInterval(elapsedSeconds),
+            completionRate: completionRate,
+            selfRating: 3,
+            notes: "训练未完成（强制退出或切后台中断）",
+            mode: trainingMode,
+            isPartial: true
+        )
+        trainingRepository.saveTrainingRecord(record)
     }
     
     // MARK: - Phase Sequence Generation

@@ -87,6 +87,8 @@ struct TrainingMethod: Identifiable, Codable {
     let targetAudience: String
     let defaultDuration: TimeInterval
     var isFavorite: Bool
+    let source: String?            // AC-C.2 来源标注
+    let contraindication: String?  // AC-C.5 禁忌人群
     
     init(id: UUID = UUID(),
          name: String,
@@ -99,7 +101,9 @@ struct TrainingMethod: Identifiable, Codable {
          expectedEffect: String,
          targetAudience: String,
          defaultDuration: TimeInterval,
-         isFavorite: Bool = false) {
+         isFavorite: Bool = false,
+         source: String? = nil,
+         contraindication: String? = nil) {
         self.id = id
         self.name = name
         self.category = category
@@ -112,6 +116,8 @@ struct TrainingMethod: Identifiable, Codable {
         self.targetAudience = targetAudience
         self.defaultDuration = defaultDuration
         self.isFavorite = isFavorite
+        self.source = source
+        self.contraindication = contraindication
     }
 }
 
@@ -148,6 +154,7 @@ struct TrainingRecord: Identifiable {
     let selfRating: Int
     let notes: String
     let mode: TrainingMode
+    let isPartial: Bool     // AC-2.10: 强制退出生成的部分记录
     
     init(id: UUID = UUID(),
          methodId: UUID,
@@ -156,7 +163,8 @@ struct TrainingRecord: Identifiable {
          completionRate: Double,
          selfRating: Int = 3,
          notes: String = "",
-         mode: TrainingMode = .basic) {
+         mode: TrainingMode = .basic,
+         isPartial: Bool = false) {
         self.id = id
         self.methodId = methodId
         self.date = date
@@ -165,6 +173,7 @@ struct TrainingRecord: Identifiable {
         self.selfRating = max(1, min(5, selfRating))
         self.notes = notes
         self.mode = mode
+        self.isPartial = isPartial
     }
 }
 

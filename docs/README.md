@@ -17,7 +17,7 @@ docs/
 │   └── tasks.md           — 实现任务拆分（v2.0，绑定 AC 编号）
 │
 └── reviews/               ← 🔍 代码审查报告
-    ├── v5.6-代码复查报告.md       — 【最新】GitHub 实编译失败复审：❌ 构建失败（已定位 14 错误并修复本地代码，待推送重跑 CI）
+    ├── v5.7-代码复查报告.md       — 【最新】GitHub 第二次实编译失败复审：❌ 构建失败（12 错误已定位并修复本地代码，待推送重跑 CI；v5.6「Group A 已修」误判已被推翻）
     ├── v4.0-测试覆盖审查报告.md   — 测试体系审查（已补测试 target/集成/UI）
     └── archive/           ← 历史审查报告（不再维护）
         ├── v3.0-代码审查报告.md         — 已失效（未经验证，被 v5.1 推翻）
@@ -27,6 +27,7 @@ docs/
         ├── v5.3-代码审查报告.md         — 构建实证：34 编译错误（v5.4 复审基线）
         ├── v5.4-代码复查报告.md         — v5.3 修复复审：2 错误残留（v5.5 复审基线）
         ├── v5.5-代码复查报告.md         — 本地复审「✅ 通过」但审查版本 ≠ CI 构建版本（虚假通过，被 v5.6 推翻）
+    ├── v5.6-代码复查报告.md         — 含虚假结论：误判「Group A 本地已修」，被 v5.7 实测推翻
         ├── v1.0-代码审查报告.md         — 初版（6 缺陷 + 8 建议）
         ├── v2.0-代码审查报告.md         — 修复验证（引入 1 回归）
         ├── IPA构建v1.0-代码审查报告.md  — momc 崩溃分析
@@ -42,7 +43,7 @@ docs/
 | **新加入的开发者** | README（根目录）→ `specs/requirements.md` → `specs/design.md` |
 | **架构设计 AI** | `specs/requirements.md` → `specs/design.md` |
 | **编码实现 AI** | `specs/tasks.md` → `specs/requirements.md` → 源码 `ControlTraining/` |
-| **代码审查 AI** | `reviews/v5.6-代码复查报告.md` → 以 CI 实编译日志为真相，区分已修/残留 |
+| **代码审查 AI** | `reviews/v5.7-代码复查报告.md` → 以 CI 实编译日志为真相，逐条读盘核实已修/残留 |
 | **运维/CI AI** | `specs/requirements.md` §4（技术约束）→ `reviews/archive/IPA构建v2.0.md` → `.github/workflows/build-ipa.yml` |
 | **产品经理** | `specs/requirements.md` → UI 预览 `preview/versions/v0.0.1.html` |
 
@@ -55,7 +56,7 @@ docs/
 | requirements.md | v2.0 | 当前活跃 |
 | design.md | v2.0 | 对齐需求 v2.0 |
 | tasks.md | v2.0 | 对齐需求 v2.0 |
-| 审查报告 | v5.6 | ❌ 构建失败（CI 14 错误，已修复本地代码待推送重跑；v5.5 系版本错位虚假通过） |
+| 审查报告 | v5.7 | ❌ 构建失败（CI 12 错误，已修复本地代码待推送重跑；v5.6「Group A 已修」误判已被推翻，v5.5 系版本错位虚假通过） |
 
 ---
 

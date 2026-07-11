@@ -303,12 +303,16 @@ class SecurityService {
     
     /// SEC-01 修复：使用 CryptoKit PBKDF2<SHA256>（100,000 次迭代）
     private func hashPassword(_ password: String, salt: Data) -> Data? {
+        guard let passwordData = password.data(using: .utf8) else { return nil }
         let symKey = PBKDF2<SHA256>.deriveKey(
-            password: password,
+            fromKeyMaterial: passwordData,
             salt: salt,
-            iterations: 100_000
+            length: 32,
+            iterations: 100_000,
+            using: .derivedKey
         )
-        return symKey.withUnsafeBytes { Data($0) }
+        let bytes = [UInt8](symKey.withUnsafeBytes { $0 })
+        return Data(bytes)
     }
 }
 

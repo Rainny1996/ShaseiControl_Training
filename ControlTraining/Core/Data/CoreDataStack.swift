@@ -92,6 +92,7 @@ class DataController: ObservableObject {
             DispatchQueue.main.async {
                 self?.container.viewContext.reset()
             }
+        }
     }
 
     // MARK: - iCloud Exclusion (AC-7.5)

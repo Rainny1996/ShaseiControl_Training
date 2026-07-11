@@ -62,7 +62,7 @@ struct PrivacySettingsView: View {
             
             // MARK: - 密码管理
             if isPasswordEnabled {
-                Section(header: Text("密码管理"), content: {
+                Section {
                     Button(action: { showChangePassword = true }) {
                         HStack {
                             Label("修改密码", systemImage: "pencil")
@@ -79,6 +79,8 @@ struct PrivacySettingsView: View {
                             Spacer()
                         }
                     }
+                } header: {
+                    Text("密码管理")
                 }
             }
             
@@ -118,7 +120,7 @@ struct PrivacySettingsView: View {
             }
             
             // MARK: - 关于隐私
-            Section(header: Text("关于"), content: {
+            Section {
                 NavigationLink(destination: PrivacyPolicyView()) {
                     HStack {
                         Text("隐私政策")
@@ -138,6 +140,8 @@ struct PrivacySettingsView: View {
                             .font(.caption)
                     }
                 }
+            } header: {
+                Text("关于")
             } footer: {
                 Text("所有训练数据仅存储在您的设备本地，不会上传至任何服务器。")
             }

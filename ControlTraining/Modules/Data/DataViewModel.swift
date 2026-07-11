@@ -52,13 +52,13 @@ final class DataViewModel: ObservableObject {
 
             do {
                 // 1. 读取所有实体数据
-                let exports = self.collectAllData(in: context)
+                let exports = await self.collectAllData(in: context)
 
                 // 2. 序列化为 JSON
                 let jsonData = try JSONEncoder().encode(exports)
 
                 // 3. AES-256-GCM 二次加密
-                guard let sealedBox = try self.cryptoService.encryptData(jsonData) else {
+                guard let sealedBox = try await self.cryptoService.encryptData(jsonData) else {
                     await MainActor.run { self.showError("导出加密失败") }
                     return nil
                 }

@@ -13,11 +13,17 @@ targets:
       - ControlTraining
     dependencies:
       - framework: Charts.framework
+        embed: false
       - framework: AVFoundation.framework
+        embed: false
       - framework: LocalAuthentication.framework
+        embed: false
       - framework: CryptoKit.framework
+        embed: false
       - framework: Security.framework
+        embed: false
       - framework: UserNotifications.framework
+        embed: false
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.controltraining.app

@@ -50,7 +50,7 @@ d:\Project\男性控制训练\男性控制训练\
 
 ```
 📄 docs/reviews/v4.0-测试覆盖审查报告.md       ← 测试体系审查（已补测试 target/集成/UI）
-📄 docs/reviews/v5.7-代码复查报告.md          ← 最新代码复查（GitHub 三次实编译失败复审），❌ 构建失败（首轮 12 错误 + 二次 2 处真实本地错误 + 三次 1 处自引入 `CCPBKDFPRF` 回归，均已修复本地代码，待重跑 CI；v5.6「Group A 已修」系误判，已被推翻）
+📄 docs/reviews/v5.7-代码复查报告.md          ← 最新代码复查（GitHub 四次实编译失败复审），❌ 构建失败（首轮 12 错误 + 二次 2 处真实本地错误 + 三次 1 处自引入 `CCPBKDFPRF` 回归 + 四次 `project.yml` 嵌入 6 个系统框架致 Embed 失败，均已修复，待重跑 CI；v5.6「Group A 已修」系误判，已被推翻）
 📁 docs/reviews/archive/                       ← 历史版本（已归档，仅供参考）
     ├── v3.0-代码审查报告.md   （已失效：未经验证，被 v5.1 推翻）
     ├── v5.0-代码审查报告.md   （全量代码审查，5 项 P0 编译阻断，被 v5.1 复核替代）
@@ -207,7 +207,7 @@ v5.5 → v5.4 修复复审：✅ 通过，RC-7b（TrainingGoal.icon）已补、R
 |------|------|------|
 | 2026-07-11 | 整理归档 | 统一文档到 `docs/`，清理根目录 |
 | 2026-07-11 | v0.0.1 UI 预览 | 液态玻璃风格 |
-| 2026-07-11 | v5.7 代码复查（GitHub 第三次实编译失败复审） | ❌ "Build APP" `BUILD FAILED`，首轮 12 错误 + 二次 2 处真实本地错误（已修）；二次修正推送后重跑仍失败，复现 1 处自引入回归（SecurityService:317 误用不存在的 `CCPBKDFPRF(kCCPRFHmacSHA256)`，且 `kCCPRFHmacSHA256` 未被覆盖层导出），第三次修正为原始值 `3`，待重跑 CI；推翻 v5.6「Group A 已修」误判 |
+| 2026-07-11 | v5.7 代码复查（GitHub 第四次实编译失败复审） | ❌ "Build APP" `BUILD FAILED`：首轮 12 错误 + 二次 2 处真实本地错误（已修）；二次修正推送后重跑仍失败，复现 1 处自引入回归（SecurityService:317 误用 `CCPBKDFPRF(kCCPRFHmacSHA256)` 且 `kCCPRFHmacSHA256` 未导出），第三次修正为原始值 `3`；四次失败转为 `project.yml` 将 Charts/AVFoundation/LocalAuthentication/CryptoKit/Security/UserNotifications 6 个系统框架默认 `embed: true` 致 Embed 拷贝失败，已改 `embed: false`，待重跑 CI；推翻 v5.6「Group A 已修」误判 |
 | 2026-07-11 | v5.6 代码复查（已归档·含虚假结论） | ❌ 误判「Group A 本地已修」，被 v5.7 实测推翻；showError/Data?解包/TrainingGoal.description 三项修复有效并已推送 |
 | 2026-07-11 | v5.5 代码复查（已归档·虚假通过） | ❌ 原判「✅ 通过」系审查版本 ≠ CI 构建版本（本地领先 GitHub）的错位误判，被 v5.6 实编译推翻 |
 | 2026-07-11 | v5.4 代码复查（已归档） | ❌ 仍不通过，RC-7b 未修 + RC-3 新回归（`rounds:`），2 错误残留 |

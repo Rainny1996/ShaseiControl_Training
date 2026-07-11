@@ -3,6 +3,7 @@ import LocalAuthentication
 import UIKit
 import CryptoKit
 import Security
+import CommonCrypto
 
 /// 安全服务，负责隐私保护相关功能
 class SecurityService {
@@ -301,18 +302,27 @@ class SecurityService {
         return salt
     }
     
-    /// SEC-01 修复：使用 CryptoKit PBKDF2<SHA256>（100,000 次迭代）
+    /// SEC-01 修复：使用 CommonCrypto PBKDF2-HMAC-SHA256（100,000 次迭代）
     private func hashPassword(_ password: String, salt: Data) -> Data? {
         guard let passwordData = password.data(using: .utf8) else { return nil }
-        let symKey = PBKDF2<SHA256>.deriveKey(
-            fromKeyMaterial: passwordData,
-            salt: salt,
-            length: 32,
-            iterations: 100_000,
-            using: .derivedKey
-        )
-        let bytes = [UInt8](symKey.withUnsafeBytes { $0 })
-        return Data(bytes)
+        var derivedKey = Data(count: 32)
+        let status = derivedKey.withUnsafeMutableBytes { derivedKeyBytes in
+            salt.withUnsafeBytes { saltBytes in
+                CCKeyDerivationPBKDF(
+                    CCPBKDFAlgorithm(kCCPBKDF2),
+                    password,
+                    passwordData.count,
+                    saltBytes.bindMemory(to: UInt8.self).baseAddress,
+                    salt.count,
+                    CCPBKDFPRF(kCCPRFHmacSHA256),
+                    100_000,
+                    derivedKeyBytes.bindMemory(to: UInt8.self).baseAddress,
+                    32
+                )
+            }
+        }
+        guard status == kCCSuccess else { return nil }
+        return derivedKey
     }
 }
 

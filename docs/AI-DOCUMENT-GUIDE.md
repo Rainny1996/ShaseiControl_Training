@@ -181,11 +181,11 @@ v5.5 → v5.4 修复复审：✅ 通过，RC-7b（TrainingGoal.icon）已补、R
 ```
 你的工作目录: d:\Project\男性控制训练\男性控制训练\
 必读文件:
-  1. docs/reviews/v5.7-代码复查报告.md  — 最新审查结论（❌ 实编译失败，12 错误已定位并修复本地代码，待推送后重跑 CI；v5.6「Group A 已修」误判已被实测推翻）
+  1. docs/reviews/v5.7-代码复查报告.md  — 最新审查结论（v5.7 首轮修复推送后 CI 仍失败，复现 2 处真实本地错误：CoreDataStack:19 setOption String→NSObject、SecurityService PBKDF2 类型未导出；已二次修正待重跑 CI；v5.6「Group A 已修」误判已被实测推翻）
   2. docs/specs/requirements.md         — AC 编号可追溯
   3. docs/specs/tasks.md                — 任务覆盖度检查
 测试目录: ControlTrainingTests/（unit-test）+ ControlTrainingUITests/（ui-testing）
-当前: 166 用例（159 单测 + 5 集成 + 2 UI 冒烟）；v5.7 复审：CI 实编译暴露 12 错误（CoreDataStack 缺括号 / SecurityService PBKDF2 标签错 / PrivacySettingsView Section 非法 / DataViewModel 缺 await），已定位并修复本地代码，须提交推送后重跑 `xcodebuild build` + `test.yml`（⚠️ v5.6「Group A 本地已修」系未读盘误判，被 v5.7 推翻；v5.5 审查版本与构建版本错位，结论作废）
+当前: 166 用例（159 单测 + 5 集成 + 2 UI 冒烟）；v5.7 复审：CI 实编译暴露 12 错误（CoreDataStack 缺括号 / SecurityService PBKDF2 / PrivacySettingsView Section 非法 / DataViewModel 缺 await），首轮已定位并修复本地代码推送；重跑 CI 仍失败，复现 2 处真实本地错误（CoreDataStack:19 setOption String→NSObject 须 `as NSString`；本环境 CryptoKit 未导出 `PBKDF2` 类型，改用 CommonCrypto `CCKeyDerivationPBKDF`），已二次修正待重跑 `xcodebuild build` + `test.yml`（⚠️ v5.6「Group A 本地已修」系未读盘误判，被 v5.7 推翻；v5.5 审查版本与构建版本错位，结论作废）
 详见: docs/reviews/v4.0-测试覆盖审查报告.md
 ```
 
@@ -207,7 +207,7 @@ v5.5 → v5.4 修复复审：✅ 通过，RC-7b（TrainingGoal.icon）已补、R
 |------|------|------|
 | 2026-07-11 | 整理归档 | 统一文档到 `docs/`，清理根目录 |
 | 2026-07-11 | v0.0.1 UI 预览 | 液态玻璃风格 |
-| 2026-07-11 | v5.7 代码复查（GitHub 第二次实编译失败复审） | ❌ "Build APP" `BUILD FAILED`，定位 12 错误（CoreDataStack 缺括号 / SecurityService PBKDF2 标签错 / PrivacySettingsView Section 非法 / DataViewModel 缺 await），已修复本地代码待重跑 CI；推翻 v5.6「Group A 已修」误判 |
+| 2026-07-11 | v5.7 代码复查（GitHub 第二次实编译失败复审） | ❌ "Build APP" `BUILD FAILED`，首轮定位 12 错误并修复推送；重跑仍失败，复现 2 处真实本地错误（CoreDataStack:19 setOption String→NSObject、SecurityService PBKDF2 类型未导出），二次修正（as NSString / 改用 CommonCrypto CCKeyDerivationPBKDF）待重跑 CI；推翻 v5.6「Group A 已修」误判 |
 | 2026-07-11 | v5.6 代码复查（已归档·含虚假结论） | ❌ 误判「Group A 本地已修」，被 v5.7 实测推翻；showError/Data?解包/TrainingGoal.description 三项修复有效并已推送 |
 | 2026-07-11 | v5.5 代码复查（已归档·虚假通过） | ❌ 原判「✅ 通过」系审查版本 ≠ CI 构建版本（本地领先 GitHub）的错位误判，被 v5.6 实编译推翻 |
 | 2026-07-11 | v5.4 代码复查（已归档） | ❌ 仍不通过，RC-7b 未修 + RC-3 新回归（`rounds:`），2 错误残留 |

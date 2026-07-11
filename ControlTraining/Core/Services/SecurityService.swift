@@ -314,7 +314,7 @@ class SecurityService {
                     passwordData.count,
                     saltBytes.bindMemory(to: UInt8.self).baseAddress,
                     salt.count,
-                    CCPBKDFPRF(kCCPRFHmacSHA256),
+                    3,  // kCCPRFHmacSHA256：本 SDK 的 CommonCrypto Swift 覆盖层未导出该常量，使用其标准原始值（CCPseudoRandomAlgorithm = 3）
                     100_000,
                     derivedKeyBytes.bindMemory(to: UInt8.self).baseAddress,
                     32

@@ -68,8 +68,6 @@ schemes:
     build:
       targets:
         ControlTraining: all
-        ControlTrainingTests: test
-        ControlTrainingUITests: test
     test:
       targets:
         - ControlTrainingTests

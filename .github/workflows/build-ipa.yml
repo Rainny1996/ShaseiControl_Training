@@ -151,6 +151,8 @@ jobs:
             exit 1
           fi
           echo "Found app at: $APP_PATH"
+          # 移除测试包 PlugIns（避免 LiveContainer 重签名失败）
+          rm -rf "$APP_PATH"/PlugIns 2>/dev/null || true
           mkdir -p Payload
           cp -r "$APP_PATH" Payload/
           zip -r ControlTraining.ipa Payload

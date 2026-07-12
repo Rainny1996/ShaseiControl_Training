@@ -70,8 +70,8 @@ final class Tests需求10自定义计划: XCTestCase {
             goal: .control,
             difficulty: .beginner,
             dayDrafts: [
-                DayDraft(dayOffset: 0, methodIds: [method.id]),
-                DayDraft(dayOffset: 3, methodIds: [method.id, firstMethod2().id])
+                DayDraft(dayOffset: 0, methodSelections: [MethodSelection(methodId: method.id)]),
+                DayDraft(dayOffset: 3, methodSelections: [MethodSelection(methodId: method.id), MethodSelection(methodId: firstMethod2().id)])
             ]
         )
         let plan = service.buildCustomPlan(dayDrafts: draft.dayDrafts, goal: .control)
@@ -167,7 +167,7 @@ final class Tests需求10自定义计划: XCTestCase {
         vm.customPlanDraft = PlanDraft(
             goal: .endurance,
             difficulty: .beginner,
-            dayDrafts: [DayDraft(dayOffset: 1, methodIds: [method.id])]
+            dayDrafts: [DayDraft(dayOffset: 1, methodSelections: [MethodSelection(methodId: method.id)])]
         )
 
         // 生成（覆盖写）
@@ -192,8 +192,8 @@ final class Tests需求10自定义计划: XCTestCase {
             goal: .endurance,
             icon: "leaf.fill",
             days: [
-                UserPlanTemplateDay(dayOffset: 0, methodIds: [firstMethod().id]),
-                UserPlanTemplateDay(dayOffset: 2, methodIds: [firstMethod().id])
+                UserPlanTemplateDay(dayOffset: 0, methodSelections: [MethodSelection(methodId: firstMethod().id)]),
+                UserPlanTemplateDay(dayOffset: 2, methodSelections: [MethodSelection(methodId: firstMethod().id)])
             ],
             description: "单元测试用例模板"
         )
@@ -225,7 +225,7 @@ final class PlanBuilderIntegrationTests: XCTestCase {
         let method = TrainingContentData.allTrainingMethods().first!
         vm.customPlanDraft = PlanDraft(
             goal: .endurance, difficulty: .beginner,
-            dayDrafts: [DayDraft(dayOffset: 0, methodIds: [method.id])]
+            dayDrafts: [DayDraft(dayOffset: 0, methodSelections: [MethodSelection(methodId: method.id)])]
         )
 
         // 渲染真实视图（强制 body 求值），不应崩溃

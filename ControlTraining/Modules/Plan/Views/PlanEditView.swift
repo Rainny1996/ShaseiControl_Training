@@ -252,18 +252,21 @@ private struct PlanEditItemRow: View {
 }
 
 #Preview {
-    let items = [
-        PlanItem(date: Date(),
-                 methodId: TrainingContentData.allTrainingMethods()[0].id,
-                 methodName: TrainingContentData.allTrainingMethods()[0].name,
-                 duration: 300)
-    ]
-    let vm = PlanViewModel()
-    vm.editingDraft = PlanEditDraft(
-        planId: UUID(),
-        startDate: Date(),
-        endDate: Calendar.current.date(byAdding: .day, value: 7, to: Date())!,
-        items: items
-    )
+    let vm: PlanViewModel = {
+        let vm = PlanViewModel()
+        let items = [
+            PlanItem(date: Date(),
+                     methodId: TrainingContentData.allTrainingMethods()[0].id,
+                     methodName: TrainingContentData.allTrainingMethods()[0].name,
+                     duration: 300)
+        ]
+        vm.editingDraft = PlanEditDraft(
+            planId: UUID(),
+            startDate: Date(),
+            endDate: Calendar.current.date(byAdding: .day, value: 7, to: Date())!,
+            items: items
+        )
+        return vm
+    }()
     PlanEditView(viewModel: vm)
 }

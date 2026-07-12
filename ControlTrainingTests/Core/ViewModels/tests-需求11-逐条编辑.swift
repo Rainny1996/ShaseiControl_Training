@@ -52,16 +52,19 @@ final class Tests需求11逐条编辑: XCTestCase {
         return repo.fetchActivePlan()!
     }
 
-    // MARK: - AC-11.2 / 11.3 / 11.4 增删改 + 进度重算（后台上下文 + 主上下文合并）
+    // MARK: - AC-11.2 / 11.3 / 11.4 增删改 + 进度重算（内存草稿 + updatePlanItems 全量保存，符合 Q6 冻结设计）
 
-    func testAddPlanItemUpdatesItemsAndProgress() {
+    /// AC-11.3 新增：编辑态在内存草稿增项，保存走 updatePlanItems，进度重算
+    func testAddViaDraftUpdatesItemsAndProgress() {
         let plan = seedPlan(completedIndices: [0])   // 1/3 完成
-        XCTAssertEqual(plan.items.count, 3)
-        XCTAssertEqual(plan.progress, 1.0 / 3.0, accuracy: 0.001)
-
-        let m = methods()[0]
-        repo.addPlanItem(planId: plan.id, date: plan.startDate,
-                         methodId: m.id, methodName: m.name, duration: 300)
+        let vm = PlanViewModel(planRepository: repo,
+                               trainingRepository: TrainingRepository(dataController: dc))
+        vm.loadPlan()
+        vm.beginPlanEditing()
+        let method = methods()[0]
+        vm.addItem(method: method, date: plan.startDate)
+        let errors = vm.savePlanEdits()
+        XCTAssertTrue(errors.isEmpty, "合法输入不应有校验错误")
         waitUntil { self.repo.fetchActivePlan()?.items.count == 4 }
 
         let updated = repo.fetchActivePlan()!
@@ -69,24 +72,38 @@ final class Tests需求11逐条编辑: XCTestCase {
         XCTAssertEqual(updated.progress, 1.0 / 4.0, accuracy: 0.001, "新增后进度应重算为 1/4")
     }
 
-    func testUpdatePlanItemReflectsAndRecomputes() {
-        let plan = seedPlan(completedIndices: [0, 1]) // 2/3
-        let target = plan.items[2]
-        let renamed = PlanItem(id: target.id, date: target.date,
-                               methodId: target.methodId, methodName: "已改名方法",
-                               duration: 450, isCompleted: true)
-        repo.updatePlanItem(renamed)
-        waitUntil { self.repo.fetchActivePlan()?.items.first(where: { $0.id == target.id })?.methodName == "已改名方法" }
+    /// AC-11.2 替换方法 / 改时长 / 改日期：编辑落内存草稿，保存走 updatePlanItems，进度重算
+    func testEditViaDraftReflectsAndRecomputes() {
+        let plan = seedPlan(completedIndices: [0, 1, 2]) // 全部完成 → 1.0
+        let vm = PlanViewModel(planRepository: repo,
+                               trainingRepository: TrainingRepository(dataController: dc))
+        vm.loadPlan()
+        vm.beginPlanEditing()
+        guard let target = vm.editingDraft?.items.last else { XCTFail("应存在可编辑项"); return }
+        let replacement = methods()[1]   // 真实方法，替换目标项（AC-11.2 替换方法）
+        vm.editItemMethod(target.id, method: replacement)
+        vm.editItemDuration(target.id, duration: 450)
+        vm.editItemDate(target.id, date: target.date)
+        let errors = vm.savePlanEdits()
+        XCTAssertTrue(errors.isEmpty, "合法输入不应有校验错误")
+        waitUntil { self.repo.fetchActivePlan()?.items.first(where: { $0.id == target.id })?.methodName == replacement.name }
 
         let updated = repo.fetchActivePlan()!
-        XCTAssertEqual(updated.items.first(where: { $0.id == target.id })?.methodName, "已改名方法")
-        XCTAssertEqual(updated.progress, 1.0, accuracy: 0.001, "全部完成后进度应为 1.0")
+        XCTAssertEqual(updated.items.first(where: { $0.id == target.id })?.methodName, replacement.name)
+        XCTAssertEqual(updated.progress, 1.0, accuracy: 0.001, "编辑保留完成态，全部完成后进度应为 1.0")
     }
 
-    func testRemovePlanItemUpdatesItemsAndProgress() {
+    /// AC-11.3 删除：编辑态在内存草稿删项，保存走 updatePlanItems，进度重算
+    func testRemoveViaDraftUpdatesItemsAndProgress() {
         let plan = seedPlan(completedIndices: [0]) // 1/3
-        let target = plan.items[1]
-        repo.removePlanItem(target.id)
+        let vm = PlanViewModel(planRepository: repo,
+                               trainingRepository: TrainingRepository(dataController: dc))
+        vm.loadPlan()
+        vm.beginPlanEditing()
+        guard let target = vm.editingDraft?.items[1] else { XCTFail("应存在可删除项"); return }
+        vm.removeItem(target.id)
+        let errors = vm.savePlanEdits()
+        XCTAssertTrue(errors.isEmpty, "合法输入不应有校验错误")
         waitUntil { self.repo.fetchActivePlan()?.items.count == 2 }
 
         let updated = repo.fetchActivePlan()!

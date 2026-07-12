@@ -21,9 +21,9 @@
 | AC | 覆盖方式 | 对应测试 / 验证 | 通过状态 | 备注 |
 |----|----------|----------------|----------|------|
 | AC-11.1 | UI + 手动 | `ControlTrainingUITests.testKeyEntriesHaveAccessibilityLabels`（编辑计划入口） | ⚠️ 需 CI/真机 | 需活跃计划方可出现菜单项；真实 ≤2 点击以手动验证 |
-| AC-11.2 | 单测 | `Tests需求11逐条编辑.testUpdatePlanItemReflectsAndRecomputes` | ✅ 已实现并覆盖 | 替换方法/改时长/改日期，写库后 `progress` 重算一致 |
-| AC-11.3 | 单测 | `testAddPlanItemUpdatesItemsAndProgress`、`testRemovePlanItemUpdatesItemsAndProgress` | ✅ 已实现并覆盖 | 增删后 `items` 与 `progress` 一致（后台上下文保存+主上下文合并） |
-| AC-11.4 | 单测 + 集成 | `testAddPlanItemUpdatesItemsAndProgress`、`PlanEditIntegrationTests.testPlanEditViewRendersAndSave` | ✅ 已实现并覆盖 | `performBackgroundTask` 保存 + `automaticallyMergesChangesFromParent` 合并到 `viewContext`；保存后 `refresh()` 刷新 |
+| AC-11.2 | 单测 | `Tests需求11逐条编辑.testEditViaDraftReflectsAndRecomputes` | ✅ 已实现并覆盖 | 内存草稿替换方法/改时长/改日期，`savePlanEdits` → `updatePlanItems` 全量保存后 `progress` 重算一致（符合 Q6） |
+| AC-11.3 | 单测 | `testAddViaDraftUpdatesItemsAndProgress`、`testRemoveViaDraftUpdatesItemsAndProgress` | ✅ 已实现并覆盖 | 内存草稿增删，`savePlanEdits` → `updatePlanItems` 全量保存后 `items` 与 `progress` 一致（符合 Q6） |
+| AC-11.4 | 单测 + 集成 | `testAddViaDraftUpdatesItemsAndProgress`、`PlanEditIntegrationTests.testPlanEditViewRendersAndSave` | ✅ 已实现并覆盖 | `savePlanEdits` → `updatePlanItems`（后台上下文保存+主上下文合并）到 `viewContext`；保存后 `refresh()` 刷新 |
 | AC-11.5 | 单测 | `testSavePlanEditsRejectsZeroDuration`、`testSavePlanEditsRejectsOutOfRangeDate`、`testSavePlanEditsValidWrites`、`testCancelPlanEditsDiscards` | ✅ 已实现并覆盖 | 时长≤0/日期越界返回 `[PlanEditValidationError]` 且不写库；合法则写库；取消丢弃草稿 |
 | AC-11.6 | 单测 + 回归 | `Tests需求11逐条编辑.testRequirement3GenerationRegressionNotBroken` + 既有 `PlanServiceTests`（需求 3） | ✅ 已实现并覆盖 | `createPlanFromTemplate`/`adjustPlanIfNeeded`/`regeneratePlan` 未被破坏，既有回归用例不受影响 |
 | AC-11.7 | UI + 手动 | PlanEditView 内 `accessibilityLabel`（编辑/保存/取消/删除等） | ⚠️ 需 CI/真机 | 以代码审查确认标签存在；Dynamic Type/44pt 真机手动验证 |

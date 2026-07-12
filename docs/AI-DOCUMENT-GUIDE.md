@@ -128,7 +128,7 @@ v5.5 → v5.4 修复复审：✅ 通过，RC-7b（TrainingGoal.icon）已补、R
 | 维度 | 状态 | 文件 |
 |------|------|------|
 | 需求 | ✅ v2.0 | `docs/specs/requirements.md` |
-| 设计 | ✅ v2.0 + v2.1 | `docs/specs/design.md`（v2.1 训练计划增强设计 §5 已沉淀，原草案归档 `docs/archive/plan-v2.1/`；决策冻结 `open-questions.md`） |
+| 设计 | ✅ v2.0 + v2.1 | `docs/specs/design.md`（v2.1 训练计划增强设计 §5 已**完整合并**需求 10/11/12，自包含；原草案归档 `docs/archive/plan-v2.1/` 作快照；决策冻结 `open-questions.md`） |
 | 任务 | ✅ v2.0 | `docs/specs/tasks.md` |
 | 审查 | ✅ v5.9 用户反馈 4 项 BUG 修复全部成立（#1 评估跳转 / #2 智能调整 / #3 挤压图标 / #4 密码 FaceID 冷启动）；#2 初版编译阻断残留扩展已删，lint 0 错误，可提交；v4.0 测试体系已就绪 | `docs/reviews/v5.9-BUG修复复查报告.md`（历史见 `docs/reviews/archive/v5.8-测试与打包审查报告.md`） |
 | UI 预览 | ✅ v0.0.2 | `preview/versions/v0.0.2.html` |
@@ -208,7 +208,7 @@ v5.5 → v5.4 修复复审：✅ 通过，RC-7b（TrainingGoal.icon）已补、R
 | 日期 | 操作 | 说明 |
 |------|------|------|
 | 2026-07-11 | 整理归档 | 统一文档到 `docs/`，清理根目录 |
-| 2026-07-12 | v2.1 文档整理 | 需求 10/11/12 设计草案（`design-需求10/11/12` + 01~04 分工 Prompt）核心合并入 `docs/specs/design.md` §5；原文件归档至 `docs/archive/plan-v2.1/`（含 MANIFEST）；`open-questions.md`/`BUG-TASK-ASSIGNMENT.md` 保留原位并标注「已完结/已修复」 |
+| 2026-07-12 | v2.1 文档整理 | 需求 10/11/12 设计草案（`design-需求10/11/12` + 01~04 分工 Prompt）**完整合并**入 `docs/specs/design.md` §5（含 AC 映射/流程图/数据模型/契约/决策记录，自包含）；原文件归档至 `docs/archive/plan-v2.1/`（含 MANIFEST，作历史快照）；`open-questions.md`/`BUG-TASK-ASSIGNMENT.md` 保留原位并标注「已完结/已修复」 |
 | 2026-07-11 | v0.0.1 UI 预览 | 液态玻璃风格 |
 | 2026-07-11 | v0.0.2 Bug Fix 迭代 | 4 项用户反馈 Bug 修复（#1–#4），预览新增更新面板 |
 | 2026-07-11 | v5.9 BUG 修复复查（用户反馈复审） | ✅ 4/4 BUG 修复成立：#1 评估完成跳转（shouldDismiss 驱动 dismiss）、#2 智能调整按钮（TrainingRepository.fetchRecentRecords 真实实现；初版残留 `extension TrainingRepository` 存根致编译失败，本轮已删除，0 lint 错误）、#3 挤压图标（SF Symbol `rectangle.compress.vertical`）、#4 密码/FaceID 冷启动（AppState.isLocked 初始化 + ContentView `.none` 放行 + AppDelegate 去冗余）；可提交并推送；v5.8 修复方案此前已确认执行，被 v5.9 承接 |

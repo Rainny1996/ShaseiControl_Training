@@ -14,31 +14,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Diagnostics - Environment
-        run: |
-          echo "=== pwd ==="
-          pwd
-          echo "=== ls -la (root) ==="
-          ls -la
-          echo "=== git ls-files ==="
-          git ls-files | head -50
-          echo "=== locale ==="
-          locale
-          echo "=== available Xcode.app ==="
-          ls -d /Applications/Xcode*.app 2>/dev/null || echo "NONE"
-          echo "=== xcodebuild path ==="
-          which xcodebuild
-
       - name: Select Xcode
         run: |
           sudo xcode-select -switch /Applications/Xcode.app
           xcodebuild -version
-          echo "DEVELOPER_DIR=$DEVELOPER_DIR"
 
       - name: Locate project
         id: locate
         run: |
-          # 在仓库根查找 .xcodeproj，兼容本地嵌套目录与仓库根直接包含两种情况
           PROJECT_FILE=$(find . -name "毅练.xcodeproj" -maxdepth 3 | head -1)
           if [ -z "$PROJECT_FILE" ]; then
             echo "::error::Could not locate 毅练.xcodeproj"
@@ -48,48 +31,38 @@ jobs:
           echo "PROJECT_FILE=$PROJECT_FILE" >> "$GITHUB_OUTPUT"
           echo "Found project at: $PROJECT_FILE"
 
-      - name: Diagnostics - pbxproj integrity
+      - name: Create workspace (bypass xcodeproj parse bug)
         run: |
-          PROJECT_DIR="${{ steps.locate.outputs.PROJECT_FILE }}"
-          PBXPROJ="$PROJECT_DIR/project.pbxproj"
-          echo "=== pbxproj file info ==="
-          echo "path: $PBXPROJ"
-          echo "size: $(wc -c < "$PBXPROJ") bytes"
-          echo "lines: $(wc -l < "$PBXPROJ")"
-          echo "first 40 bytes (hex):"
-          xxd -l 40 "$PBXPROJ"
-          echo "last 20 bytes (hex):"
-          xxd -s -20 "$PBXPROJ"
-          echo "=== plutil validation ==="
-          plutil -lint "$PBXPROJ" 2>&1 || echo "plutil validation FAILED"
-          echo "=== .xcodeproj contents ==="
-          find "$PROJECT_DIR" -type f | sort
-
-      - name: Try Xcode 26
-        run: |
-          echo "=== Trying Xcode 26.0 ==="
-          sudo xcode-select -switch /Applications/Xcode_26.0.app
-          xcodebuild -version
-          xcodebuild -list -project "${{ steps.locate.outputs.PROJECT_FILE }}" 2>&1 | head -40 || echo "XCODE26_LIST_FAILED"
-          echo "=== Reset to Xcode 16.4 ==="
-          sudo xcode-select -switch /Applications/Xcode.app
-          xcodebuild -version
-
-      - name: Diagnostics - xcodebuild list
-        run: |
-          echo "=== xcodebuild -list ==="
-          xcodebuild -list -project "${{ steps.locate.outputs.PROJECT_FILE }}" || echo "LIST FAILED with code $?"
+          PROJECT_FILE="${{ steps.locate.outputs.PROJECT_FILE }}"
+          # 通过 xcodebuild 创建临时 workspace，绕过 -project 解析 bug
+          xcodebuild -create-xcworkspace \
+            -project "$PROJECT_FILE" \
+            -workspace YiLian.xcworkspace 2>&1
+          echo "=== workspace contents ==="
+          find YiLian.xcworkspace -type f | sort
+          cat YiLian.xcworkspace/contents.xcworkspacedata
 
       - name: Clean Build
         run: |
-          rm -rf build build-output
+          rm -rf build build-output YiLian.xcworkspace
           rm -rf ~/Library/Developer/Xcode/DerivedData/* || true
 
-      - name: Build App (无签名)
+      - name: Create workspace & Build
         run: |
           set -o pipefail
+          PROJECT_FILE="${{ steps.locate.outputs.PROJECT_FILE }}"
+
+          # Step 1: 创建临时 workspace
+          xcodebuild -create-xcworkspace \
+            -project "$PROJECT_FILE" \
+            -workspace YiLian.xcworkspace 2>&1 || {
+              echo "::error::Failed to create workspace"
+              exit 1
+            }
+
+          # Step 2: 通过 workspace + scheme 构建
           xcodebuild build \
-            -project "${{ steps.locate.outputs.PROJECT_FILE }}" \
+            -workspace YiLian.xcworkspace \
             -scheme "毅练" \
             -configuration Release \
             -sdk iphoneos \
@@ -103,7 +76,7 @@ jobs:
           BUILD_RC=${PIPESTATUS[0]}
           if [ "$BUILD_RC" -ne 0 ]; then
             echo "========== BUILD FAILED (exit $BUILD_RC) =========="
-            echo "::error::BUILD FAILED - 见下方错误"
+            echo "::error::BUILD FAILED"
             grep -E "error:|fatal:|** BUILD" build.log | head -40 | while read -r line; do echo "::error::$line"; done
             exit 1
           fi
@@ -121,12 +94,10 @@ jobs:
       - name: Create IPA
         run: |
           set -o pipefail
-          # 用通配 *.app 避免 macOS 中文文件名 NFC/NFD 规范化导致精确匹配失败
           APP_PATH=$(find ~/Library/Developer/Xcode/DerivedData -name "*.app" | head -1)
           if [ -z "$APP_PATH" ]; then
             echo "ERROR: Could not find any .app"
             echo "::error::Could not find any .app"
-            echo "=== DerivedData tree ==="
             find ~/Library/Developer/Xcode/DerivedData -maxdepth 6 -name "*.app" 2>/dev/null | head -60
             ls -laR ~/Library/Developer/Xcode/DerivedData/*/Build/Products/ 2>/dev/null | head -40
             exit 1

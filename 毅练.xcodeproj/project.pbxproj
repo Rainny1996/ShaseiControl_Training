@@ -29,6 +29,8 @@
 		AA0000000000000000000020 /* FinishedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0000000000000000000020 /* FinishedView.swift */; };
 		AA0000000000000000000021 /* LockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0000000000000000000021 /* LockView.swift */; };
 		AA0000000000000000000022 /* RecordsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0000000000000000000022 /* RecordsView.swift */; };
+		AA0000000000000000000031 /* RadarChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0000000000000000000031 /* RadarChartView.swift */; };
+		AA0000000000000000000032 /* RecordDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0000000000000000000032 /* RecordDetailView.swift */; };
 		AA0000000000000000000023 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0000000000000000000023 /* SettingsView.swift */; };
 		AA0000000000000000000024 /* BreathingCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0000000000000000000024 /* BreathingCircle.swift */; };
 		AA0000000000000000000025 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0000000000000000000025 /* ContentView.swift */; };
@@ -62,6 +64,8 @@
 		BB0000000000000000000020 /* FinishedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinishedView.swift; sourceTree = "<group>"; };
 		BB0000000000000000000021 /* LockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockView.swift; sourceTree = "<group>"; };
 		BB0000000000000000000022 /* RecordsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordsView.swift; sourceTree = "<group>"; };
+		BB0000000000000000000031 /* RadarChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarChartView.swift; sourceTree = "<group>"; };
+		BB0000000000000000000032 /* RecordDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetailView.swift; sourceTree = "<group>"; };
 		BB0000000000000000000023 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		BB0000000000000000000024 /* BreathingCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreathingCircle.swift; sourceTree = "<group>"; };
 		BB0000000000000000000025 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -177,6 +181,9 @@
 				BB0000000000000000000020 /* FinishedView.swift */,
 				BB0000000000000000000021 /* LockView.swift */,
 				BB0000000000000000000022 /* RecordsView.swift */,
+				BB0000000000000000000031 /* RadarChartView.swift */,
+				BB0000000000000000000032 /* RecordDetailView.swift */,
+
 				BB0000000000000000000023 /* SettingsView.swift */,
 				BB0000000000000000000024 /* BreathingCircle.swift */,
 				BB0000000000000000000025 /* ContentView.swift */,
@@ -287,6 +294,8 @@
 				AA0000000000000000000020 /* FinishedView.swift in Sources */,
 				AA0000000000000000000021 /* LockView.swift in Sources */,
 				AA0000000000000000000022 /* RecordsView.swift in Sources */,
+				AA0000000000000000000031 /* RadarChartView.swift in Sources */,
+				AA0000000000000000000032 /* RecordDetailView.swift in Sources */,
 				AA0000000000000000000023 /* SettingsView.swift in Sources */,
 				AA0000000000000000000024 /* BreathingCircle.swift in Sources */,
 				AA0000000000000000000025 /* ContentView.swift in Sources */,

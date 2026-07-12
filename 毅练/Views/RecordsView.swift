@@ -9,6 +9,10 @@ struct RecordsView: View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 24) {
+                    // 最新状态雷达图
+                    RadarCardView(scores: vm.latestRadarScores())
+                        .padding(.horizontal, 16)
+
                     if !vm.chartData.isEmpty {
                         TrendChartView(data: vm.chartData)
                             .frame(height: 180)
@@ -16,7 +20,9 @@ struct RecordsView: View {
                     }
                     LazyVStack(spacing: 12) {
                         ForEach(vm.sessions, id: \.id) { s in
-                            RecordRow(session: s)
+                            NavigationLink(destination: RecordDetailView(session: s)) {
+                                RecordRow(session: s)
+                            }
                         }
                     }
                     .padding(.horizontal, 16)
@@ -31,6 +37,7 @@ struct RecordsView: View {
             .navigationTitle("训练记录")
             .onAppear { vm.reload() }
         }
+        .navigationViewStyle(.stack)
     }
 
     private func export() {
@@ -76,6 +83,32 @@ struct Tag: View {
         Text(text).font(.system(size: 12)).foregroundColor(color)
             .padding(.horizontal, 10).padding(.vertical, 4)
             .background(color.opacity(0.15)).cornerRadius(8)
+    }
+}
+
+/// 最新状态雷达图卡片
+struct RadarCardView: View {
+    let scores: [String: Double]
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("最新状态解析")
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundColor(.ylText)
+            let items = RecordsViewModel.radarDimensions.map { ($0, scores[$0] ?? 0) }
+            if items.contains(where: { $0.1 > 0 }) {
+                RadarChartView(scores: items)
+                    .frame(height: 240)
+            } else {
+                Text("暂无训练数据")
+                    .font(.system(size: 14))
+                    .foregroundColor(.ylTextSecondary)
+                    .frame(height: 120)
+                    .frame(maxWidth: .infinity, alignment: .center)
+            }
+        }
+        .padding(16)
+        .background(Color.ylBackground2)
+        .cornerRadius(16)
     }
 }
 

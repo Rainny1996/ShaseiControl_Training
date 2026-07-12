@@ -21,12 +21,19 @@ final class TrainingStateMachine: ObservableObject {
     private(set) var prematureEjaculation: Bool = false
     private(set) var brakePoint: Float = 7.0
 
+    /// 阶段计时：进入每个状态的时间点，用于结算上一状态时长
+    private var enteredStateAt: Date?
+    /// 每轮各阶段时长聚合：phaseByCycle[cycle-1][stage] = 秒数
+    private(set) var phaseByCycle: [[String: Double]] = []
+
     private var monitorBag = Set<AnyCancellable>()
 
     init(config: TrainingConfig, voice: VoiceService, timer: TimerScheduler) {
         self.config = config
         self.voice = voice
         self.timer = timer
+        self.startTime = Date()
+        self.enteredStateAt = self.startTime
     }
 
     // MARK: - 事件入口
@@ -81,6 +88,8 @@ final class TrainingStateMachine: ObservableObject {
 
     // MARK: - 阶段切换
     private func transitionTo(_ newState: TrainingState) {
+        settleCurrentPhase() // 结算上一个状态在该轮中的累计时长
+        enteredStateAt = Date()
         state = newState
         timer.cancelAll()
         voice.stopAndClear()
@@ -182,9 +191,39 @@ final class TrainingStateMachine: ObservableObject {
     }
 
     private func finish() {
+        settleCurrentPhase() // 结算最后一个阶段时长
         timer.cancelAll()
         voice.stopAndClear()
         transitionTo(.finished)
+    }
+
+    // MARK: - 阶段时长结算
+    /// 结算当前状态自 enteredStateAt 起经历的时长，累加到对应轮次与阶段。
+    /// 仅循环阶段（低兴奋/控制区/停止回落/挤捏）计入 phaseByCycle，索引 = cycle - 1。
+    /// 非循环阶段（准备/唤醒/射精许可/完成）不计入，避免污染轮次明细。
+    private func settleCurrentPhase() {
+        guard let entered = enteredStateAt else { return }
+        let elapsed = Date().timeIntervalSince(entered)
+        guard elapsed > 0 else { return }
+        guard let cycle = cycleOfCurrentStateIfCyclic() else { return }
+        let stage = state.rawStage
+        let cycleIndex = cycle - 1
+        if phaseByCycle.count <= cycleIndex {
+            while phaseByCycle.count <= cycleIndex {
+                phaseByCycle.append([String: Double]())
+            }
+        }
+        phaseByCycle[cycleIndex][stage, default: 0] += elapsed
+    }
+
+    /// 若当前状态为循环阶段（低兴奋/控制区/停止回落/挤捏），返回其 cycle，否则 nil
+    private func cycleOfCurrentStateIfCyclic() -> Int? {
+        switch state {
+        case .lowArousal(let c, _), .controlZone(let c, _), .stopWaiting(let c, _), .squeeze(let c):
+            return c
+        default:
+            return nil
+        }
     }
 
     // MARK: - 辅助

@@ -74,6 +74,7 @@ final class CoreDataStack {
         session.totalDuration = Int32(Date().timeIntervalSince(machine.startTime))
         session.cycleCount = Int32(machine.controlDurations.count)
         session.controlDurationsArray = machine.controlDurations
+        session.phaseDurationsByCycle = machine.phaseByCycle
         session.usedSqueeze = machine.usedSqueeze
         session.prematureEjaculation = machine.prematureEjaculation
         session.brakePoint = machine.brakePoint

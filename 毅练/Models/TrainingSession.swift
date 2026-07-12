@@ -14,6 +14,7 @@ public class TrainingSession: NSManagedObject, Identifiable {
     @NSManaged public var prematureEjaculation: Bool
     @NSManaged public var note: String?
     @NSManaged public var brakePoint: Float          // 进入7分时的刹车点等级（6.5 / 7 等）
+    @NSManaged public var phaseDurations: Data?      // [[String: Double]] 每轮各阶段时长（秒），JSON 编码；索引 0 为无循环维度的阶段
 
     var controlDurationsArray: [Int] {
         get {
@@ -22,6 +23,17 @@ public class TrainingSession: NSManagedObject, Identifiable {
         }
         set {
             controlDurations = try? JSONEncoder().encode(newValue)
+        }
+    }
+
+    /// 每轮各阶段时长（秒）：phaseDurationsByCycle[cycle-1][stage] = 秒数
+    var phaseDurationsByCycle: [[String: Double]] {
+        get {
+            guard let data = phaseDurations else { return [] }
+            return (try? JSONDecoder().decode([[String: Double]].self, from: data)) ?? []
+        }
+        set {
+            phaseDurations = try? JSONEncoder().encode(newValue)
         }
     }
 }
@@ -40,6 +52,7 @@ extension TrainingSession {
             "totalDuration": totalDuration,
             "cycleCount": cycleCount,
             "controlDurations": controlDurationsArray,
+            "phaseDurations": phaseDurationsByCycle,
             "usedSqueeze": usedSqueeze,
             "prematureEjaculation": prematureEjaculation,
             "brakePoint": brakePoint

@@ -47,7 +47,7 @@ struct TrainingContainerView: View {
             vm.showSqueezePrompt ?
             SqueezePromptOverlay(onContinue: vm.continueWaiting, onTry: vm.trySqueeze) : nil
         )
-        .onChange(of: vm.state) { _, new in
+        .onChange(of: vm.state) { new in
             if case .stopWaiting = new {
                 // 10秒监控超时弹窗由状态机发送 timeout → squeeze，此处用弹窗打断
                 DispatchQueue.main.asyncAfter(deadline: .now() + 10) {

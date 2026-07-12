@@ -18,7 +18,7 @@ struct StopWaitingView: View {
                     .font(.system(size: 30, weight: .bold))
                     .foregroundColor(.white)
                 BreathingCircle(inhale: 4, exhale: 6, color: .green, showCountdown: countdown)
-                    .onChange(of: countdown) { _, new in
+                    .onChange(of: countdown) { new in
                         if new == 0 { withAnimation { isActivated = true } }
                     }
                 Text("硬度略降完全正常")

@@ -253,12 +253,11 @@
 		YY5003 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
-			files = (
-				YY0029 /* Assets.xcassets in Resources */,
-				YY0030 /* YiLianModel.xcdatamodeld in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
+		files = (
+			YY0029 /* Assets.xcassets in Resources */,
+		);
+		runOnlyForDeploymentPostprocessing = 0;
+	};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -269,6 +268,7 @@
 				YY0001, YY0002, YY0003, YY0004, YY0005, YY0006, YY0007, YY0008, YY0009, YY0010,
 				YY0011, YY0012, YY0013, YY0014, YY0015, YY0016, YY0017, YY0018, YY0019, YY0020,
 				YY0021, YY0022, YY0023, YY0024, YY0025, YY0026, YY0027, YY0028,
+				YY0030 /* YiLianModel.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

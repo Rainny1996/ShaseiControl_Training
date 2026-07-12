@@ -5,7 +5,7 @@ final class CoreDataStack {
     static let shared = CoreDataStack()
 
     lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "YiLianModel")
+        let container = NSPersistentContainer(name: "Model")
         container.loadPersistentStores { [weak self] _, error in
             if let error {
                 fatalError("Core Data 加载失败: \(error)")

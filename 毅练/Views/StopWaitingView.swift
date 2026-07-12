@@ -10,7 +10,14 @@ struct StopWaitingView: View {
 
     var body: some View {
         ZStack {
-            Color.ylRed.ignoresSafeArea()
+            // 双指长按手势只挂在背景层，绝不覆盖内容/按钮，避免拦截点击
+            Color.ylRed
+                .ignoresSafeArea()
+                .gesture(
+                    LongPressGesture(minimumDuration: 1.0)
+                        .simultaneously(with: LongPressGesture(minimumDuration: 1.0))
+                        .onEnded { _ in onDoubleFingerHold() }
+                )
             VStack(spacing: 24) {
                 Spacer()
                 Text("停止一切刺激")
@@ -37,11 +44,5 @@ struct StopWaitingView: View {
                 .padding(.bottom, 40)
             }
         }
-        // 双指长按1秒触发挤捏法（加在容器上，不拦截按钮点击）
-        .gesture(
-            LongPressGesture(minimumDuration: 1.0)
-                .simultaneously(with: LongPressGesture(minimumDuration: 1.0))
-                .onEnded { _ in onDoubleFingerHold() }
-        )
     }
 }

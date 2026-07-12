@@ -10,7 +10,7 @@ struct TrainingContainerView: View {
             case .prepare:
                 PrepareView(onPrepared: vm.onPrepared)
             case .arousal:
-                ArousalView(onAroused: vm.onAroused)
+                ArousalView(onAroused: vm.onAroused, onExit: vm.dismissTraining)
             case .lowArousal(let cycle, let isFinal):
                 LowArousalView(
                     isFinal: isFinal,

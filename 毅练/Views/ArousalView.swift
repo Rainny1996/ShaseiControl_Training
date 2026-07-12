@@ -3,6 +3,7 @@ import SwiftUI
 /// 唤醒阶段（可选）：暖色呼吸光晕 + 勃起按钮
 struct ArousalView: View {
     let onAroused: () -> Void
+    let onExit: () -> Void
     var body: some View {
         ZStack {
             Color.ylBackground.ignoresSafeArea()
@@ -28,8 +29,8 @@ struct ArousalView: View {
                             .foregroundColor(.white)
                             .cornerRadius(24)
                     }
-                    Button(action: onAroused) {
-                        Text("我已勃起，直接进入训练")
+                    Button(action: onExit) {
+                        Text("退出训练")
                             .font(.system(size: 15))
                             .foregroundColor(.ylTextSecondary)
                     }

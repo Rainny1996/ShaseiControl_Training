@@ -48,15 +48,12 @@ jobs:
       - name: Build App (无签名)
         run: |
           set -o pipefail
-          BUILD_ROOT="$PWD/build"
-          rm -rf "$BUILD_ROOT"
           xcodebuild build \
             -project "毅练/毅练.xcodeproj" \
             -target "毅练" \
             -configuration Release \
             -sdk iphoneos \
             -arch arm64 \
-            -derivedDataPath "$BUILD_ROOT" \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGN_IDENTITY="" \
@@ -71,33 +68,27 @@ jobs:
             exit 1
           fi
           echo "========== BUILD SUCCEEDED =========="
-          echo "=== build/ exists? ==="
-          ls -la "$BUILD_ROOT" 2>/dev/null || echo "BUILD_ROOT missing!"
-          echo "=== .app files ==="
-          find "$BUILD_ROOT" -name "*.app" 2>/dev/null || echo "no .app found"
+          echo "=== .app files in DerivedData ==="
+          find ~/Library/Developer/Xcode/DerivedData -name "*.app" 2>/dev/null || echo "no .app found"
           tail -20 build.log
 
       - name: Debug - List build products
         if: always()
         run: |
-          echo "=== .app files under build/ ==="
-          find "$PWD/build" -name "*.app" 2>/dev/null || echo "none"
-          echo "=== Products dir ==="
-          ls -laR "$PWD/build/Build/Products/" 2>/dev/null | head -40 || echo "no products"
+          echo "=== .app files in DerivedData ==="
+          find ~/Library/Developer/Xcode/DerivedData -name "*.app" 2>/dev/null || echo "none"
 
       - name: Create IPA
         run: |
           set -o pipefail
           # 用通配 *.app 避免 macOS 中文文件名 NFC/NFD 规范化导致精确匹配失败
-          APP_PATH=$(find "$PWD/build" -name "*.app" | head -1)
-          if [ -z "$APP_PATH" ]; then
-            APP_PATH=$(find ~/Library/Developer/Xcode/DerivedData -name "*.app" | head -1)
-          fi
+          APP_PATH=$(find ~/Library/Developer/Xcode/DerivedData -name "*.app" | head -1)
           if [ -z "$APP_PATH" ]; then
             echo "ERROR: Could not find any .app"
             echo "::error::Could not find any .app"
-            echo "=== build/ tree ==="
-            find "$PWD/build" -maxdepth 6 2>/dev/null | head -60
+            echo "=== DerivedData tree ==="
+            find ~/Library/Developer/Xcode/DerivedData -maxdepth 6 -name "*.app" 2>/dev/null | head -60
+            ls -laR ~/Library/Developer/Xcode/DerivedData/*/Build/Products/ 2>/dev/null | head -40
             exit 1
           fi
           echo "Found app at: $APP_PATH"

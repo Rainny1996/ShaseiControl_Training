@@ -13,6 +13,8 @@ struct TrainingContainerView: View {
                 ArousalView(onAroused: vm.onAroused, onExit: vm.dismissTraining)
             case .lowArousal(let cycle, let isFinal):
                 LowArousalView(
+                    cycle: cycle,
+                    totalCycles: vm.totalCycles,
                     isFinal: isFinal,
                     onEnteredControl: vm.onEnteredControl,
                     onReachedSeven: vm.onReachedSeven,
@@ -20,6 +22,8 @@ struct TrainingContainerView: View {
                 )
             case .controlZone(_, let isFinal):
                 ControlZoneView(
+                    cycle: vm.cycle,
+                    totalCycles: vm.totalCycles,
                     isFinal: isFinal,
                     onReachedSeven: vm.onReachedSeven,
                     onEjaculateReady: isFinal ? vm.onEjaculateReady : nil
@@ -27,11 +31,15 @@ struct TrainingContainerView: View {
             case .stopWaiting:
                 StopWaitingView(
                     countdown: vm.countdown,
+                    cycle: vm.cycle,
+                    totalCycles: vm.totalCycles,
                     onFallBackConfirmed: vm.onFallBackConfirmed,
                     onDoubleFingerHold: vm.onDoubleFingerHold
                 )
             case .squeeze:
                 SqueezeView(
+                    cycle: vm.cycle,
+                    totalCycles: vm.totalCycles,
                     onSqueezeDone: vm.onSqueezeDone,
                     onRetry: vm.onSqueezeRetry,
                     onEnd: vm.onSqueezeEnd

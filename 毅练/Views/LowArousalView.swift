@@ -2,6 +2,8 @@ import SwiftUI
 
 /// 低兴奋区（1-3分）：绿背景 + 大按钮“我进入4-6分了” + 防误触小按钮“我到了7分”
 struct LowArousalView: View {
+    let cycle: Int
+    let totalCycles: Int
     let isFinal: Bool
     let onEnteredControl: () -> Void
     let onReachedSeven: () -> Void
@@ -15,6 +17,9 @@ struct LowArousalView: View {
                 Text("平静期（1-3分）")
                     .font(.system(size: 34, weight: .bold))
                     .foregroundColor(.black)
+                Text("第 \(cycle) / \(totalCycles) 轮")
+                    .font(.system(size: 15))
+                    .foregroundColor(.black.opacity(0.6))
                 Spacer()
                 VStack(spacing: 16) {
                     Button(action: onEnteredControl) {

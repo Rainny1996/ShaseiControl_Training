@@ -1,40 +1,38 @@
 import SwiftUI
 
-/// 7分调整等待：红背景 + 呼吸圆 + 倒计时 + 灰显激活按钮 + 双指长按
+/// 7分调整等待：红背景 + 呼吸圆 + 倒计时 + 随时可点的回落按钮 + 双指长按
 struct StopWaitingView: View {
     let countdown: Int
+    let cycle: Int
+    let totalCycles: Int
     let onFallBackConfirmed: () -> Void
     let onDoubleFingerHold: () -> Void
-
-    @State private var isActivated: Bool = false
-    @State private var doubleFingerStart: Date?
 
     var body: some View {
         ZStack {
             Color.ylRed.ignoresSafeArea()
-            VStack(spacing: 28) {
+            VStack(spacing: 24) {
                 Spacer()
                 Text("停止一切刺激")
                     .font(.system(size: 30, weight: .bold))
                     .foregroundColor(.white)
+                Text("第 \(cycle) / \(totalCycles) 轮")
+                    .font(.system(size: 15))
+                    .foregroundColor(.white.opacity(0.8))
                 BreathingCircle(inhale: 4, exhale: 6, color: .green, showCountdown: countdown)
-                    .onChange(of: countdown) { new in
-                        if new == 0 { withAnimation { isActivated = true } }
-                    }
                 Text("硬度略降完全正常")
                     .font(.system(size: 15))
                     .foregroundColor(.white.opacity(0.7))
                 Spacer()
-                Button(action: isActivated ? onFallBackConfirmed : {}) {
-                    Text(isActivated ? "回落完成，继续刺激" : "回落完成后按这里")
+                Button(action: onFallBackConfirmed) {
+                    Text(countdown > 0 ? "回落完成，继续刺激" : "回落完成，继续刺激")
                         .font(.system(size: 18, weight: .semibold))
                         .frame(maxWidth: .infinity)
                         .frame(height: 56)
-                        .background(isActivated ? Color.white : Color.white.opacity(0.2))
-                        .foregroundColor(isActivated ? .black : .white.opacity(0.5))
+                        .background(Color.white)
+                        .foregroundColor(.black)
                         .cornerRadius(24)
                 }
-                .disabled(!isActivated)
                 .padding(.horizontal, 32)
                 .padding(.bottom, 40)
             }

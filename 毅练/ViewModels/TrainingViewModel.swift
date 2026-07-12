@@ -41,6 +41,7 @@ final class TrainingViewModel: ObservableObject {
 
     var countdown: Int { machine.countdownRemaining }
     var cycle: Int { machine.currentCycle }
+    var totalCycles: Int { config.cycleCount }
 
     // MARK: - 训练控制
     func start() {

@@ -169,7 +169,7 @@ class CoachViewModel: ObservableObject {
                     if options.contains(.shouldResume) {
                         // 音频会话已恢复：重新激活以继续后台语音播报；
                         // 训练仍保持暂停，由用户手动恢复（呼应 AC-2.9）
-                        self?.audioService.configureBackgroundPlayback()
+                        self.audioService.configureBackgroundPlayback()
                     }
                 }
             @unknown default: break

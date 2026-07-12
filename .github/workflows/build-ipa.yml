@@ -25,42 +25,40 @@ jobs:
           PROJECT_FILE=$(find . -name "毅练.xcodeproj" -maxdepth 3 | head -1)
           if [ -z "$PROJECT_FILE" ]; then
             echo "::error::Could not locate 毅练.xcodeproj"
-            find . -name "*.xcodeproj" | head -20
             exit 1
           fi
           echo "PROJECT_FILE=$PROJECT_FILE" >> "$GITHUB_OUTPUT"
           echo "Found project at: $PROJECT_FILE"
 
-      - name: Create workspace (bypass xcodeproj parse bug)
+      - name: Create workspace manually
         run: |
           PROJECT_FILE="${{ steps.locate.outputs.PROJECT_FILE }}"
-          # 通过 xcodebuild 创建临时 workspace，绕过 -project 解析 bug
-          xcodebuild -create-xcworkspace \
-            -project "$PROJECT_FILE" \
-            -workspace YiLian.xcworkspace 2>&1
+          # 手动构造 workspace，引用 .xcodeproj 的绝对路径
+          ABS_PROJECT=$(cd "$(dirname "$PROJECT_FILE")" && pwd)/$(basename "$PROJECT_FILE")
+          echo "Absolute project path: $ABS_PROJECT"
+
+          mkdir -p YiLian.xcworkspace
+          cat > YiLian.xcworkspace/contents.xcworkspacedata << XMLEND
+          <?xml version="1.0" encoding="UTF-8"?>
+          <Workspace
+             version = "1.0">
+             <FileRef
+                location = "absolute:${ABS_PROJECT}">
+             </FileRef>
+          </Workspace>
+          XMLEND
+
           echo "=== workspace contents ==="
-          find YiLian.xcworkspace -type f | sort
           cat YiLian.xcworkspace/contents.xcworkspacedata
 
       - name: Clean Build
         run: |
-          rm -rf build build-output YiLian.xcworkspace
+          rm -rf build build-output
           rm -rf ~/Library/Developer/Xcode/DerivedData/* || true
 
-      - name: Create workspace & Build
+      - name: Build App
         run: |
           set -o pipefail
-          PROJECT_FILE="${{ steps.locate.outputs.PROJECT_FILE }}"
-
-          # Step 1: 创建临时 workspace
-          xcodebuild -create-xcworkspace \
-            -project "$PROJECT_FILE" \
-            -workspace YiLian.xcworkspace 2>&1 || {
-              echo "::error::Failed to create workspace"
-              exit 1
-            }
-
-          # Step 2: 通过 workspace + scheme 构建
           xcodebuild build \
             -workspace YiLian.xcworkspace \
             -scheme "毅练" \
@@ -99,7 +97,6 @@ jobs:
             echo "ERROR: Could not find any .app"
             echo "::error::Could not find any .app"
             find ~/Library/Developer/Xcode/DerivedData -maxdepth 6 -name "*.app" 2>/dev/null | head -60
-            ls -laR ~/Library/Developer/Xcode/DerivedData/*/Build/Products/ 2>/dev/null | head -40
             exit 1
           fi
           echo "Found app at: $APP_PATH"

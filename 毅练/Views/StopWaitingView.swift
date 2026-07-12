@@ -25,7 +25,7 @@ struct StopWaitingView: View {
                     .foregroundColor(.white.opacity(0.7))
                 Spacer()
                 Button(action: onFallBackConfirmed) {
-                    Text(countdown > 0 ? "回落完成，继续刺激" : "回落完成，继续刺激")
+                    Text("回落完成，继续刺激")
                         .font(.system(size: 18, weight: .semibold))
                         .frame(maxWidth: .infinity)
                         .frame(height: 56)
@@ -37,15 +37,11 @@ struct StopWaitingView: View {
                 .padding(.bottom, 40)
             }
         }
-        // 双指长按1秒触发挤捏法
-        .overlay(
-            Color.clear
-                .contentShape(Rectangle())
-                .gesture(
-                    LongPressGesture(minimumDuration: 1.0)
-                        .simultaneously(with: LongPressGesture(minimumDuration: 1.0))
-                        .onEnded { _ in onDoubleFingerHold() }
-                )
+        // 双指长按1秒触发挤捏法（加在容器上，不拦截按钮点击）
+        .gesture(
+            LongPressGesture(minimumDuration: 1.0)
+                .simultaneously(with: LongPressGesture(minimumDuration: 1.0))
+                .onEnded { _ in onDoubleFingerHold() }
         )
     }
 }

@@ -7,18 +7,30 @@ final class TrainingViewModel: ObservableObject {
     @Published var isTrainingActive: Bool = false
     @Published var showSqueezePrompt: Bool = false
     @Published var lastSession: TrainingSession?
+    /// 状态镜像：主动转发状态机的 state，确保视图可靠刷新
+    @Published var state: TrainingState = .prepare
 
     private let voice = VoiceService.shared
     private let timer = TimerScheduler.shared
     private let haptic = HapticManager.shared
     private var config: TrainingConfig
+    private var stateCancellable: AnyCancellable?
 
     init(config: TrainingConfig) {
         self.config = config
         self.machine = TrainingStateMachine(config: config, voice: VoiceService.shared, timer: TimerScheduler.shared)
+        bindMachine()
     }
 
-    var state: TrainingState { machine.state }
+    /// 订阅状态机内部状态变化，冒泡到本视图模型
+    private func bindMachine() {
+        stateCancellable = machine.$state
+            .receive(on: RunLoop.main)
+            .sink { [weak self] newState in
+                self?.state = newState
+            }
+    }
+
     var countdown: Int { machine.countdownRemaining }
     var cycle: Int { machine.currentCycle }
 
@@ -27,9 +39,9 @@ final class TrainingViewModel: ObservableObject {
         isTrainingActive = true
         UIApplication.shared.isIdleTimerDisabled = true
         voice.updateConfig(config)
-        // 重置状态机
+        // 重置状态机，从准备阶段开始（由用户在 PrepareView 点击"我已准备好"推进）
         machine = TrainingStateMachine(config: config, voice: voice, timer: timer)
-        machine.send(.prepared)
+        bindMachine()
     }
 
     /// 完成训练并保存记录，但保持训练层显示以呈现 FinishedView

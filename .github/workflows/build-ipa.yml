@@ -32,6 +32,7 @@ jobs:
 
       - name: Rename xcodeproj to ASCII & diagnose
         run: |
+          set +e
           # 将中文 .xcodeproj 目录重命名为纯 ASCII
           mv "毅练.xcodeproj" "YiLian.xcodeproj"
 
@@ -42,10 +43,9 @@ jobs:
           echo "=== checking for BOM ==="
           xxd -l 4 "$PBXPROJ"
 
-          echo "=== try parsing with python pbxproj ==="
-          pip3 install --quiet pbxproj 2>/dev/null || true
-          python3 -c "from pbxproj import XcodeProject; p = XcodeProject.load('YiLian.xcodeproj/project.pbxproj'); print('pbxproj parsed OK, objectVersion:', p.root_object.get('objectVersion','?')); print('targets:', [t.name for t in p.objects.get_targets()])"
-          echo "=== python pbxproj parse attempt finished ==="
+          echo "=== basic pbxproj sanity check (stdlib only) ==="
+          python3 -c "import codecs; raw=open('YiLian.xcodeproj/project.pbxproj','rb').read(); print('size:', len(raw), 'bytes'); print('has BOM:', raw[:3]==codecs.BOM_UTF8); txt=raw.decode('utf-8', errors='replace'); print('first line:', txt.splitlines()[0] if txt else '(empty)'); print('contains // ! marker:', '// !' in txt)" || echo "(python sanity check skipped)"
+          echo "=== python sanity check finished ==="
 
           echo "=== grep for non-ASCII in pbxproj ==="
           grep -nP '[^\x00-\x7F]' "$PBXPROJ" | head -20 || echo "(no non-ASCII found)"

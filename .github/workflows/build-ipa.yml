@@ -8,19 +8,23 @@ on:
 jobs:
   build:
     name: Build IPA (无签名)
-    runs-on: macos-latest
+    runs-on: macos-15
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Select Xcode
+        run: |
+          XCODE_PATH=$(ls -d /Applications/Xcode*.app | head -1)
+          echo "Found Xcode at: $XCODE_PATH"
+          sudo xcode-select -switch "$XCODE_PATH"
+          xcodebuild -version
+
       - name: Show Environment
         run: |
-          echo "=== Xcode Version ==="
-          xcodebuild -version
-          echo ""
           echo "=== List Schemes ==="
-          xcodebuild -list -project "毅练/毅练.xcodeproj"
+          xcodebuild -list -project "毅练/毅练.xcodeproj" || true
 
       - name: Clean Build
         run: |

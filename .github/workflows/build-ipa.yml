@@ -14,6 +14,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # 将中文项目路径重命名为 ASCII 路径，规避 xcodebuild 对中文路径的解析问题
+      - name: Rename project to ASCII path
+        run: |
+          mv "毅练" YiLian
+          mv "毅练.xcodeproj" YiLian.xcodeproj
+          echo "=== Renamed structure ==="
+          ls -la
+          ls -la YiLian.xcodeproj
+
       - name: Select Xcode
         run: |
           XCODE_PATH=$(ls -d /Applications/Xcode*.app | head -1)
@@ -24,18 +33,19 @@ jobs:
       - name: Show Environment
         run: |
           echo "=== List Targets ==="
-          xcodebuild -list -project "毅练/毅练.xcodeproj" || true
+          xcodebuild -list -project "YiLian.xcodeproj"
+          echo "=== List all Xcode.app ==="
+          ls -d /Applications/Xcode*.app
 
       - name: Clean Build
         run: |
-          rm -rf build
-          rm -rf ~/Library/Developer/Xcode/DerivedData/毅练-*
+          rm -rf build build-output
+          rm -rf ~/Library/Developer/Xcode/DerivedData/YiLian-*
 
       - name: Build App (无签名)
         run: |
-          set -o pipefail
           xcodebuild build \
-            -project "毅练/毅练.xcodeproj" \
+            -project "YiLian.xcodeproj" \
             -target "毅练" \
             -configuration Release \
             -sdk iphoneos \
@@ -47,7 +57,13 @@ jobs:
             CODE_SIGN_IDENTITY="" \
             DEVELOPMENT_TEAM="" \
             ENABLE_BITCODE=NO \
-            2>&1 | tee build.log
+            > build.log 2>&1 || {
+              echo "========== BUILD FAILED =========="
+              cat build.log
+              exit 1
+            }
+          echo "========== BUILD SUCCEEDED =========="
+          tail -20 build.log
 
       - name: Debug - List build products
         if: always()
@@ -55,9 +71,6 @@ jobs:
           echo "=== .app files ==="
           find build-output -name "*.app" 2>/dev/null || echo "No .app files found in build-output"
           find build -name "*.app" 2>/dev/null || echo "No .app files found in build"
-          echo ""
-          echo "=== Build products directory ==="
-          ls -laR build-output/Release-iphoneos/ 2>/dev/null || echo "Products directory not found"
 
       - name: Create IPA
         run: |
@@ -75,20 +88,19 @@ jobs:
             exit 1
           fi
           echo "Found app at: $APP_PATH"
-          # 移除测试包 PlugIns（避免重签名问题）
           rm -rf "$APP_PATH"/PlugIns 2>/dev/null || true
           mkdir -p Payload
           cp -r "$APP_PATH" Payload/
-          zip -r 毅练.ipa Payload
+          zip -r YiLian.ipa Payload
           echo "IPA created successfully"
-          ls -la 毅练.ipa
+          ls -la YiLian.ipa
 
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         if: success()
         with:
-          name: 毅练-ipa
-          path: 毅练.ipa
+          name: YiLian-ipa
+          path: YiLian.ipa
           retention-days: 30
 
       - name: Upload build log on failure

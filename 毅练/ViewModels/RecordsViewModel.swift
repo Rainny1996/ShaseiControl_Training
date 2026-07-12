@@ -54,11 +54,11 @@ final class RecordsViewModel: ObservableObject {
         let completion = clamp01(Double(cycleCount) / 5.0) * 100 - (premature ? 30 : 0)
 
         return [
-            "控制力": max(0, min(100, control)),
-            "恢复力": max(0, min(100, recover)),
-            "耐力": max(0, min(100, endurance)),
-            "稳定性": max(0, min(100, stability)),
-            "完成度": max(0, min(100, completion))
+            "控制力": max(0.0, min(100.0, control)),
+            "恢复力": max(0.0, min(100.0, recover)),
+            "耐力": max(0.0, min(100.0, endurance)),
+            "稳定性": max(0.0, min(100.0, stability)),
+            "完成度": max(0.0, min(100.0, completion))
         ]
     }
 

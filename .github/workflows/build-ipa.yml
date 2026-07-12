@@ -60,8 +60,20 @@ jobs:
           xxd -l 40 "$PBXPROJ"
           echo "last 20 bytes (hex):"
           xxd -s -20 "$PBXPROJ"
+          echo "=== plutil validation ==="
+          plutil -lint "$PBXPROJ" 2>&1 || echo "plutil validation FAILED"
           echo "=== .xcodeproj contents ==="
           find "$PROJECT_DIR" -type f | sort
+
+      - name: Try Xcode 26
+        run: |
+          echo "=== Trying Xcode 26.0 ==="
+          sudo xcode-select -switch /Applications/Xcode_26.0.app
+          xcodebuild -version
+          xcodebuild -list -project "${{ steps.locate.outputs.PROJECT_FILE }}" 2>&1 | head -40 || echo "XCODE26_LIST_FAILED"
+          echo "=== Reset to Xcode 16.4 ==="
+          sudo xcode-select -switch /Applications/Xcode.app
+          xcodebuild -version
 
       - name: Diagnostics - xcodebuild list
         run: |

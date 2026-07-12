@@ -48,6 +48,21 @@ jobs:
           echo "PROJECT_FILE=$PROJECT_FILE" >> "$GITHUB_OUTPUT"
           echo "Found project at: $PROJECT_FILE"
 
+      - name: Diagnostics - pbxproj integrity
+        run: |
+          PROJECT_DIR="${{ steps.locate.outputs.PROJECT_FILE }}"
+          PBXPROJ="$PROJECT_DIR/project.pbxproj"
+          echo "=== pbxproj file info ==="
+          echo "path: $PBXPROJ"
+          echo "size: $(wc -c < "$PBXPROJ") bytes"
+          echo "lines: $(wc -l < "$PBXPROJ")"
+          echo "first 40 bytes (hex):"
+          xxd -l 40 "$PBXPROJ"
+          echo "last 20 bytes (hex):"
+          xxd -s -20 "$PBXPROJ"
+          echo "=== .xcodeproj contents ==="
+          find "$PROJECT_DIR" -type f | sort
+
       - name: Diagnostics - xcodebuild list
         run: |
           echo "=== xcodebuild -list ==="

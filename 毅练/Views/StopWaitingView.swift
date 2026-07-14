@@ -23,7 +23,7 @@ struct StopWaitingView: View {
             VStack {
                 HStack {
                     Spacer()
-                    CoachButton(title: "我已射精", height: 44, style: .danger) { onEjaculated() }
+                    CoachButton(title: "我已射精", style: .danger, height: 44) { onEjaculated() }
                         .frame(width: 110)
                         .padding(.top, 56)
                         .padding(.trailing, 16)

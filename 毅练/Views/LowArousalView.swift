@@ -50,7 +50,7 @@ struct LowArousalView: View {
                     if let finalAction = onEjaculateReady {
                         CoachButton(title: "我已准备好射精", style: .primary) { finalAction() }
                     }
-                    CoachButton(title: "我到了 7 分（停止）", height: 48, style: .primary) { onReachedSeven() }
+                    CoachButton(title: "我到了 7 分（停止）", style: .primary, height: 48) { onReachedSeven() }
                 }
                 .padding(.horizontal, 32)
                 .padding(.bottom, 40)

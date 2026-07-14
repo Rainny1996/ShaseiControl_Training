@@ -72,7 +72,6 @@ jobs:
             ENABLE_BITCODE=NO \
             SWIFT_ENABLE_EXPLICIT_MODULES=NO \
             _EXPERIMENTAL_SWIFT_EXPLICIT_MODULES=NO \
-            SWIFT_COMPILATION_MODE=singlefile \
             | tee build.log
           BUILD_RC=${PIPESTATUS[0]}
           if [ "$BUILD_RC" -ne 0 ]; then

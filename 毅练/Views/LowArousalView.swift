@@ -8,7 +8,7 @@ struct LowArousalView: View {
     let onEnteredControl: () -> Void
     let onReachedSeven: () -> Void
     let onEjaculateReady: (() -> Void)?   // 仅最后一轮显示
-    let hasStopped: Bool = false           // 是否已进入过停止阶段（用于显示「恢复中」）
+    var hasStopped: Bool = false           // 是否已进入过停止阶段（用于显示「恢复中」）
 
     var body: some View {
         ZStack {

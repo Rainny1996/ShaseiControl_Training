@@ -28,7 +28,7 @@ struct PrepareView: View {
                                 Image(systemName: items[i].icon)
                                     .foregroundColor(items[i].ok ? .ylSuccess : .ylWarning)
                                 Text(items[i].text)
-                                    .font(.system(size: 20))
+                                    .font(.system(size: 22))
                                     .foregroundColor(.ylText)
                             }
                             .transition(.opacity.combined(with: .move(edge: .leading)))

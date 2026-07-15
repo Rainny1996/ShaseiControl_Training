@@ -55,7 +55,8 @@ struct TrainingContainerView: View {
                 isFinal: isFinal,
                 onEnteredControl: vm.onEnteredControl,
                 onReachedSeven: vm.onReachedSeven,
-                onEjaculateReady: isFinal ? vm.onEjaculateReady : nil
+                onEjaculateReady: isFinal ? vm.onEjaculateReady : nil,
+                hasStopped: vm.hasStopped
             )
         case .controlZone(_, let isFinal):
             ControlZoneView(
@@ -139,7 +140,7 @@ struct EjaculateReadyView: View {
             Image(systemName: "checkmark.circle.fill")
                 .foregroundColor(.white)
             Text(text)
-                .font(.system(size: 18))
+                .font(.system(size: 22))
                 .foregroundColor(.white.opacity(0.95))
         }
     }

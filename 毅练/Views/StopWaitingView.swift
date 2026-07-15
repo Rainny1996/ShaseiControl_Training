@@ -36,9 +36,9 @@ struct StopWaitingView: View {
             VStack(spacing: 18) {
                 Spacer().frame(height: 28)
                 VStack(spacing: 6) {
-                    Text("🛑 停止刺激")
-                        .font(.system(size: 34, weight: .bold))
-                        .foregroundColor(.white)
+                Text("停止刺激")
+                    .font(.system(size: 48, weight: .bold))
+                    .foregroundColor(.white)
                     Text("第 \(cycle) / \(totalCycles) 轮")
                         .font(.system(size: 16, weight: .medium))
                         .foregroundColor(.white.opacity(0.8))
@@ -73,7 +73,7 @@ struct StopWaitingView: View {
             Image(systemName: "checkmark.circle.fill")
                 .foregroundColor(.white.opacity(0.85))
             Text(text)
-                .font(.system(size: 18))
+                .font(.system(size: 22))
                 .foregroundColor(.white.opacity(0.95))
         }
     }

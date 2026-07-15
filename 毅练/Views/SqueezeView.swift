@@ -19,7 +19,7 @@ struct SqueezeView: View {
                 Spacer().frame(height: 28)
                 VStack(spacing: 6) {
                     Text("停止-挤压法")
-                        .font(.system(size: 34, weight: .bold))
+                        .font(.system(size: 48, weight: .bold))
                         .foregroundColor(.white)
                     Text("第 \(cycle) / \(totalCycles) 轮")
                         .font(.system(size: 16, weight: .medium))
@@ -28,7 +28,7 @@ struct SqueezeView: View {
 
                 GlassCard {
                     Text("拇指按在龟头腹侧系带处，食指+中指放在背侧冠状沟，形成 V 字钳。用适中压力挤压 5-10 秒。")
-                        .font(.system(size: 18))
+                        .font(.system(size: 22))
                         .foregroundColor(.white.opacity(0.95))
                         .multilineTextAlignment(.center)
                 }
@@ -50,7 +50,7 @@ struct SqueezeView: View {
                     }
                 } else {
                     Text("准备好后，点击下方按钮开始挤压计时")
-                        .font(.system(size: 18))
+                        .font(.system(size: 22))
                         .foregroundColor(.white.opacity(0.7))
                 }
 

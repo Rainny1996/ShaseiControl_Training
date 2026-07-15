@@ -8,6 +8,7 @@ struct LowArousalView: View {
     let onEnteredControl: () -> Void
     let onReachedSeven: () -> Void
     let onEjaculateReady: (() -> Void)?   // 仅最后一轮显示
+    let hasStopped: Bool = false           // 是否已进入过停止阶段（用于显示「恢复中」）
 
     var body: some View {
         ZStack {
@@ -24,6 +25,15 @@ struct LowArousalView: View {
                     Text("第 \(cycle) / \(totalCycles) 轮")
                         .font(.system(size: 16, weight: .medium))
                         .foregroundColor(.black.opacity(0.55))
+                    if hasStopped {
+                        Text("恢复中")
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundColor(.black.opacity(0.6))
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 4)
+                            .background(Color.black.opacity(0.08))
+                            .cornerRadius(8)
+                    }
                 }
 
                 GlassCard {

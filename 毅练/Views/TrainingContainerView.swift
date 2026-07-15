@@ -20,12 +20,13 @@ struct TrainingContainerView: View {
                 StageProgressView(
                     state: vm.state,
                     currentCycle: vm.cycle,
-                    totalCycles: vm.totalCycles
+                    totalCycles: vm.totalCycles,
+                    hasStopped: vm.hasStopped
                 )
                 .transition(.move(edge: .top).combined(with: .opacity))
             }
         }
-        .animation(.easeInOut(duration: 0.4), value: vm.state.rawStage)
+        .animation(.easeInOut(duration: 0.8), value: vm.state.rawStage)
         .overlay(
             vm.showSqueezePrompt ?
             SqueezePromptOverlay(onContinue: vm.continueWaiting, onTry: vm.trySqueeze) : nil
@@ -120,7 +121,7 @@ struct EjaculateReadyView: View {
                 }
                 .padding(.horizontal, 24)
                 Text("现在可以自然射精\n无需继续控制，享受释放即可")
-                    .font(.system(size: 16))
+                    .font(.system(size: 18))
                     .foregroundColor(.white.opacity(0.9))
                     .multilineTextAlignment(.center)
                 Spacer()
@@ -138,7 +139,7 @@ struct EjaculateReadyView: View {
             Image(systemName: "checkmark.circle.fill")
                 .foregroundColor(.white)
             Text(text)
-                .font(.system(size: 15))
+                .font(.system(size: 18))
                 .foregroundColor(.white.opacity(0.95))
         }
     }

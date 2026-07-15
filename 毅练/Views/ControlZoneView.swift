@@ -24,17 +24,17 @@ struct ControlZoneView: View {
                 Spacer()
             }
 
-            VStack(spacing: 20) {
-                Spacer().frame(height: 56)
+            VStack(spacing: 18) {
+                Spacer().frame(height: 28)
                 VStack(spacing: 8) {
                     Text("快感可控")
-                        .font(.system(size: 36, weight: .bold))
+                        .font(.system(size: 48, weight: .bold))
                         .foregroundColor(.black)
                     Text("4-6 分")
-                        .font(.system(size: 22, weight: .semibold))
+                        .font(.system(size: 34, weight: .semibold))
                         .foregroundColor(.black.opacity(0.7))
                     Text("第 \(cycle) / \(totalCycles) 轮")
-                        .font(.system(size: 15, weight: .medium))
+                        .font(.system(size: 16, weight: .medium))
                         .foregroundColor(.black.opacity(0.55))
                 }
 
@@ -43,7 +43,7 @@ struct ControlZoneView: View {
                         HStack(spacing: 8) {
                             Image(systemName: "target").foregroundColor(.black.opacity(0.7))
                             Text("当前目标：保持 5-6 分")
-                                .font(.system(size: 17, weight: .medium))
+                                .font(.system(size: 22, weight: .medium))
                                 .foregroundColor(.black)
                         }
                         checkRow("呼吸放慢")
@@ -72,7 +72,7 @@ struct ControlZoneView: View {
                     CoachButton(title: "我已准备好射精", style: .primary) { finalAction() }
                         .padding(.horizontal, 32)
                 }
-                Spacer().frame(height: 40)
+                Spacer().frame(height: 28)
             }
         }
     }
@@ -82,7 +82,7 @@ struct ControlZoneView: View {
             Image(systemName: "checkmark.circle.fill")
                 .foregroundColor(.black.opacity(0.55))
             Text(text)
-                .font(.system(size: 15))
+                .font(.system(size: 20))
                 .foregroundColor(.black.opacity(0.85))
         }
     }

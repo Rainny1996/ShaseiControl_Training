@@ -9,15 +9,15 @@ struct ArousalView: View {
         ZStack {
             LinearGradient.ylDark.ignoresSafeArea()
             WarmGlow()
-            VStack(spacing: 28) {
+            VStack(spacing: 22) {
                 Spacer()
                 Text("请轻柔刺激，帮助自然勃起")
-                    .font(.system(size: 20, weight: .semibold))
+                    .font(.system(size: 22, weight: .semibold))
                     .foregroundColor(.ylText)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 32)
                 Text("无需着急，保持放松")
-                    .font(.system(size: 17))
+                    .font(.system(size: 18))
                     .foregroundColor(.ylTextSecondary)
                 Spacer()
                 VStack(spacing: 16) {
@@ -29,7 +29,7 @@ struct ArousalView: View {
                     }
                 }
                 .padding(.horizontal, 32)
-                .padding(.bottom, 40)
+                .padding(.bottom, 28)
             }
         }
     }

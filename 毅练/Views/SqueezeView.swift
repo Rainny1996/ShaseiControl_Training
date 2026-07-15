@@ -15,20 +15,20 @@ struct SqueezeView: View {
     var body: some View {
         ZStack {
             LinearGradient.ylRelease.ignoresSafeArea()
-            VStack(spacing: 22) {
-                Spacer().frame(height: 56)
+            VStack(spacing: 18) {
+                Spacer().frame(height: 28)
                 VStack(spacing: 6) {
                     Text("停止-挤压法")
-                        .font(.system(size: 32, weight: .bold))
+                        .font(.system(size: 34, weight: .bold))
                         .foregroundColor(.white)
                     Text("第 \(cycle) / \(totalCycles) 轮")
-                        .font(.system(size: 15))
+                        .font(.system(size: 16, weight: .medium))
                         .foregroundColor(.white.opacity(0.8))
                 }
 
                 GlassCard {
                     Text("拇指按在龟头腹侧系带处，食指+中指放在背侧冠状沟，形成 V 字钳。用适中压力挤压 5-10 秒。")
-                        .font(.system(size: 15))
+                        .font(.system(size: 18))
                         .foregroundColor(.white.opacity(0.95))
                         .multilineTextAlignment(.center)
                 }
@@ -50,7 +50,7 @@ struct SqueezeView: View {
                     }
                 } else {
                     Text("准备好后，点击下方按钮开始挤压计时")
-                        .font(.system(size: 15))
+                        .font(.system(size: 18))
                         .foregroundColor(.white.opacity(0.7))
                 }
 
@@ -67,7 +67,7 @@ struct SqueezeView: View {
                     }
                 }
                 .padding(.horizontal, 32)
-                .padding(.bottom, 20)
+                .padding(.bottom, 24)
             }
             Text("若疼痛不适，立即停止")
                 .font(.system(size: 13))

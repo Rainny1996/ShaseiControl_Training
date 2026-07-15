@@ -16,10 +16,10 @@ struct PrepareView: View {
     var body: some View {
         ZStack {
             LinearGradient.ylDark.ignoresSafeArea()
-            VStack(spacing: 28) {
+            VStack(spacing: 22) {
                 Spacer()
                 Text("训练准备")
-                    .font(.system(size: 30, weight: .bold))
+                    .font(.system(size: 34, weight: .bold))
                     .foregroundColor(.ylText)
                 GlassCard {
                     VStack(alignment: .leading, spacing: 16) {
@@ -28,7 +28,7 @@ struct PrepareView: View {
                                 Image(systemName: items[i].icon)
                                     .foregroundColor(items[i].ok ? .ylSuccess : .ylWarning)
                                 Text(items[i].text)
-                                    .font(.system(size: 16))
+                                    .font(.system(size: 20))
                                     .foregroundColor(.ylText)
                             }
                             .transition(.opacity.combined(with: .move(edge: .leading)))
@@ -39,7 +39,7 @@ struct PrepareView: View {
                 Spacer()
                 CoachButton(title: "我已准备好", style: .primary) { onPrepared() }
                     .padding(.horizontal, 32)
-                    .padding(.bottom, 40)
+                    .padding(.bottom, 28)
             }
         }
         .onAppear {

@@ -12,24 +12,24 @@ struct LowArousalView: View {
     var body: some View {
         ZStack {
             LinearGradient.ylCalm.ignoresSafeArea()
-            VStack(spacing: 20) {
-                Spacer().frame(height: 56)
+            VStack(spacing: 18) {
+                Spacer().frame(height: 28)
                 VStack(spacing: 8) {
                     Text("平静期")
-                        .font(.system(size: 36, weight: .bold))
+                        .font(.system(size: 48, weight: .bold))
                         .foregroundColor(.black)
                     Text("1-3 分")
-                        .font(.system(size: 22, weight: .semibold))
+                        .font(.system(size: 34, weight: .semibold))
                         .foregroundColor(.black.opacity(0.7))
                     Text("第 \(cycle) / \(totalCycles) 轮")
-                        .font(.system(size: 15, weight: .medium))
+                        .font(.system(size: 16, weight: .medium))
                         .foregroundColor(.black.opacity(0.55))
                 }
 
                 GlassCard {
                     VStack(alignment: .leading, spacing: 10) {
                         Text("教练指导")
-                            .font(.system(size: 14, weight: .semibold))
+                            .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(.black.opacity(0.6))
                         guidanceRow("保持自然呼吸")
                         guidanceRow("无需刻意刺激")
@@ -40,7 +40,7 @@ struct LowArousalView: View {
                 HStack(spacing: 8) {
                     Image(systemName: "target").foregroundColor(.black.opacity(0.7))
                     Text("当前目标：进入 4-6 分")
-                        .font(.system(size: 17, weight: .medium))
+                        .font(.system(size: 22, weight: .medium))
                         .foregroundColor(.black)
                 }
 
@@ -53,7 +53,7 @@ struct LowArousalView: View {
                     CoachButton(title: "我到了 7 分（停止）", style: .primary, height: 48) { onReachedSeven() }
                 }
                 .padding(.horizontal, 32)
-                .padding(.bottom, 40)
+                .padding(.bottom, 28)
             }
         }
     }
@@ -63,7 +63,7 @@ struct LowArousalView: View {
             Image(systemName: "checkmark.circle.fill")
                 .foregroundColor(.black.opacity(0.5))
             Text(text)
-                .font(.system(size: 15))
+                .font(.system(size: 20))
                 .foregroundColor(.black.opacity(0.85))
         }
     }

@@ -13,6 +13,8 @@ struct BreathingCircle: View {
     var showCountdown: Int? = nil
     /// 焦点模式：呼吸圆作为视觉中心，倒计时数字移到圆下方并缩小（停止阶段使用）
     var focusMode: Bool = false
+    /// 相位文字模式：在圆心显示「吸气 N / 呼气 N」，彻底隐藏倒计时（停止阶段使用）
+    var showPhaseText: Bool = false
 
     @State private var elapsed: Double = 0
 
@@ -38,9 +40,11 @@ struct BreathingCircle: View {
 
         Group {
             if focusMode {
-                VStack(spacing: 14) {
+                ZStack {
                     ring
-                    if let count = showCountdown {
+                    if showPhaseText {
+                        phaseLabel
+                    } else if let count = showCountdown {
                         Text("\(count)")
                             .font(.system(size: 40, weight: .bold, design: .rounded))
                             .foregroundColor(.white)
@@ -61,6 +65,21 @@ struct BreathingCircle: View {
         }
         .onReceive(Timer.publish(every: 0.05, on: .main, in: .common).autoconnect()) { _ in
             elapsed += 0.05
+        }
+    }
+
+    private var phaseLabel: some View {
+        let t = elapsed.truncatingRemainder(dividingBy: total)
+        let isInhale = t < inhale
+        let remaining = Int(ceil(isInhale ? inhale - t : total - t))
+        return VStack(spacing: 2) {
+            Text(isInhale ? "吸气" : "呼气")
+                .font(.system(size: 26, weight: .semibold))
+                .foregroundColor(.white)
+            Text("\(remaining)")
+                .font(.system(size: 40, weight: .bold, design: .rounded))
+                .foregroundColor(.white)
+                .monospacedDigit()
         }
     }
 }

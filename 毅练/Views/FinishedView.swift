@@ -36,7 +36,7 @@ struct FinishedView: View {
                 }
                 .padding(.horizontal, 32)
                 Text("你做得很好。保持规律训练，感受身体掌控力的提升。")
-                    .font(.system(size: 15))
+                    .font(.system(size: 18))
                     .foregroundColor(.ylTextSecondary)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 32)

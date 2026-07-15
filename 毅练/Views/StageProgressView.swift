@@ -6,16 +6,18 @@ struct StageProgressView: View {
     let state: TrainingState
     let currentCycle: Int
     let totalCycles: Int
+    /// 是否已进入过停止阶段：用于把「停止后回到低兴奋」高亮为独立「恢复」段
+    let hasStopped: Bool
 
-    private let segments = ["平静", "控制", "停止·恢复", "完成"]
+    private let segments = ["平静", "控制", "停止", "恢复", "完成"]
 
     /// 当前高亮段索引；prepare/arousal 返回 -1（暂不强调）。
     private var activeIndex: Int {
         switch state {
-        case .lowArousal:            return 0
+        case .lowArousal:            return hasStopped ? 3 : 0
         case .controlZone:           return 1
         case .stopWaiting, .squeeze: return 2
-        case .ejaculateReady, .finished: return 3
+        case .ejaculateReady, .finished: return 4
         default:                     return -1
         }
     }

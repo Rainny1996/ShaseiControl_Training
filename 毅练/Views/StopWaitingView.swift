@@ -9,6 +9,8 @@ struct StopWaitingView: View {
     let onDoubleFingerHold: () -> Void
     let onEjaculated: () -> Void         // 右上角：中途射精，结束并记录
 
+    @State private var appeared = false
+
     var body: some View {
         ZStack {
             // 双指长按手势只挂在背景层，绝不覆盖内容/按钮，避免拦截点击
@@ -31,20 +33,22 @@ struct StopWaitingView: View {
                 Spacer()
             }
 
-            VStack(spacing: 20) {
-                Spacer().frame(height: 56)
+            VStack(spacing: 18) {
+                Spacer().frame(height: 28)
                 VStack(spacing: 6) {
-                    Text("停止刺激")
-                        .font(.system(size: 32, weight: .bold))
+                    Text("🛑 停止刺激")
+                        .font(.system(size: 34, weight: .bold))
                         .foregroundColor(.white)
                     Text("第 \(cycle) / \(totalCycles) 轮")
-                        .font(.system(size: 15))
+                        .font(.system(size: 16, weight: .medium))
                         .foregroundColor(.white.opacity(0.8))
                 }
 
-                // 呼吸圆为视觉焦点，倒计时数字移到圆下方
+                // 呼吸圆为视觉焦点：圆心显示吸气/呼气文字，彻底隐藏倒计时
                 BreathingCircle(inhale: 4, exhale: 6, color: .white,
-                                showCountdown: countdown, focusMode: true)
+                                focusMode: true, showPhaseText: true)
+                    .scaleEffect(appeared ? 1 : 0.92)
+                    .animation(.spring(response: 0.4, dampingFraction: 0.7), value: appeared)
 
                 GlassCard {
                     VStack(alignment: .leading, spacing: 10) {
@@ -56,11 +60,12 @@ struct StopWaitingView: View {
                 .padding(.horizontal, 24)
 
                 Spacer()
-                CoachButton(title: "回落完成，继续刺激", style: .primary) { onFallBackConfirmed() }
+                CoachButton(title: "恢复完成，继续刺激", style: .primary) { onFallBackConfirmed() }
                     .padding(.horizontal, 32)
-                    .padding(.bottom, 40)
+                    .padding(.bottom, 28)
             }
         }
+        .onAppear { appeared = true }
     }
 
     private func guidanceRow(_ text: String) -> some View {
@@ -68,7 +73,7 @@ struct StopWaitingView: View {
             Image(systemName: "checkmark.circle.fill")
                 .foregroundColor(.white.opacity(0.85))
             Text(text)
-                .font(.system(size: 15))
+                .font(.system(size: 18))
                 .foregroundColor(.white.opacity(0.95))
         }
     }

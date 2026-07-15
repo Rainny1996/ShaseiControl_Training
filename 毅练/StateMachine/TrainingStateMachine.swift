@@ -20,6 +20,8 @@ final class TrainingStateMachine: ObservableObject {
     private(set) var controlDurations: [Int] = []
     private(set) var prematureEjaculation: Bool = false
     private(set) var brakePoint: Float = 7.0
+    /// 是否已进入过停止(回落)阶段：用于区分「初始平静期」与「停止后恢复」
+    private(set) var hasStopped: Bool = false
 
     /// 阶段计时：进入每个状态的时间点，用于结算上一状态时长
     private var enteredStateAt: Date?
@@ -139,6 +141,7 @@ final class TrainingStateMachine: ObservableObject {
 
     // MARK: - 回落倒计时
     private func startFallBack(count: Int) {
+        hasStopped = true
         state = .stopWaiting(cycle: count, isFinal: isFinalCycle(count))
         countdownRemaining = config.fallBackDuration
         timer.scheduleCountdown(from: config.fallBackDuration) { [weak self] remaining in
